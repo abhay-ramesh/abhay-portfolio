@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     ports:
       - '6359:3000'
     volumes:
@@ -15,5 +16,4 @@ volumes:
 networks:
   default:
     name: web
-    external: true  
-
+    external: true
