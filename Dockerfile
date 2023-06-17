@@ -1,5 +1,5 @@
 # Base image
-FROM node:14-alpine
+FROM node:20-alpine
 
 # Set the working directory
 WORKDIR /app
@@ -11,7 +11,7 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies using PNPM
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the application code
 COPY . .
