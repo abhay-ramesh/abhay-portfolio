@@ -9,7 +9,7 @@ services:
     ports:
       - '6359:3000'
     volumes:
-      - app-data:/app
+      - app-data:/app/node_modules
 
 volumes:
   app-data:

@@ -36,3 +36,6 @@ next-env.d.ts
 
 # Visual Studio Code
 .vscode/*
+
+# Portainer
+portainer.dev.yml
