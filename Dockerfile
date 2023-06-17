@@ -17,7 +17,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Build the Next.js application
-RUN pnpm run build
+RUN pnpm run build --cache-control "no-store, no-cache, must-revalidate, proxy-revalidate"
 
 # Expose the default port for Next.js
 EXPOSE 3000
