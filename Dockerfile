@@ -17,7 +17,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Build the Next.js application
-RUN pnpm run build --cache-control
+RUN pnpm run build
 
 # Expose the default port for Next.js
 EXPOSE 3000
