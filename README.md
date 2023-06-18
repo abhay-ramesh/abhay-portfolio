@@ -32,7 +32,7 @@ Let's dive right in and explore what makes me tick:
 
 ### Startup Collaboration and Mentoring
 
-- **Startup Superhero:** Startups, listen up! I'm all about collaboration and helping you reach for the stars. Let's build innovative technologies, scale your applications, and create impactful digital products together. We'll make magic happen!
+- **Startup Mind:** Startups, listen up! I'm all about collaboration and helping you reach for the stars. Let's build innovative technologies, scale your applications, and create impactful digital products together. We'll make magic happen!
 
 - **Empowering Others:** Knowledge is meant to be shared, and I love being a mentor and helping others learn to code. I'm part of the developer community, sharing insights, providing guidance, and cheering on aspiring developers. Let's grow together!
 
