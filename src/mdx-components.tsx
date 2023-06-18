@@ -16,7 +16,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     // some margin around the content and prose styles
     // to make it look nicer for all text content.
     wrapper: ({ children }) => (
-      <div className="container mt-20 prose prose-invert prose-[#E1E7EF] sm:mx-auto mb-28 sm:pt-4">
+      <div className="container mt-20 prose prose-invert prose-[#E1E7EF] sm:mx-auto mb-28 sm:pt-4 list-outside">
         {children}
       </div>
     ),
