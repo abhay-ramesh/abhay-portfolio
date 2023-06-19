@@ -1,0 +1,28 @@
+kind: pipeline
+name: nextjs-ci
+
+steps:
+  - name: install-dependencies
+    image: node:20-alpine
+    commands:
+      - npm install -g pnpm
+      - pnpm install --frozen-lockfile
+
+  - name: lint
+    image: node:20-alpine
+    commands:
+      - pnpm run lint
+
+  - name: test
+    image: node:20-alpine
+    commands:
+      - pnpm test
+
+  - name: build
+    image: node:20-alpine
+    commands:
+      - pnpm run build
+
+trigger:
+  branch:
+    - main
