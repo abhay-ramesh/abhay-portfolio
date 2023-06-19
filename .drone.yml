@@ -9,15 +9,15 @@ steps:
       - npm install -g pnpm
       - pnpm install --frozen-lockfile
 
-  - name: lint
-    image: node:20-alpine
-    commands:
-      - pnpm run lint
-
   - name: ls
     image: node:20-alpine
     commands:
       - ls -la
+
+  - name: lint
+    image: node:20-alpine
+    commands:
+      - pnpm run lint
 
   - name: build
     image: node:20-alpine
