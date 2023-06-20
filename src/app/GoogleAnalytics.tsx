@@ -1,6 +1,8 @@
 import Script from "next/script";
+import { isProduction } from "./isProduction";
 
 export function GoogleAnalytics() {
+  if (!isProduction) return null;
   return (
     <>
       <Script

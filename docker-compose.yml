@@ -8,6 +8,8 @@ services:
       - '8080:3000'
     volumes:
       - app-data:/app/node_modules
+    environment:
+      - NODE_ENV=production
 
 volumes:
   app-data:

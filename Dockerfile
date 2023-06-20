@@ -1,6 +1,9 @@
 # Base image
 FROM node:20-alpine
 
+# Set the environment variables
+ENV NODE_ENV=production
+
 # Set the working directory
 WORKDIR /app
 
