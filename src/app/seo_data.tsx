@@ -48,29 +48,37 @@ const metadataVal: Metadata = {
   applicationName: "Abhay Ramesh | My Personal Website",
 };
 
-const jsonLd: Person = {
-  "@type": "Person",
-  name: "Abhay Ramesh",
-  jobTitle: "Software Engineer",
-  gender: "male",
-  height: "5' 10\"",
-  url: "https://abhayramesh.com",
-  image: "https://github.com/abhay-ramesh.png",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Banglore",
-    addressRegion: "Karnataka",
-    addressCountry: "India",
-  },
-  email: "ramesh.abhay14@gmail.com",
-  birthDate: "2002-07-14",
-  alumniOf: "PES University",
-  birthPlace: "Hassan",
-  sameAs: [
-    "https://www.linkedin.com/in/abhay-ramesh/",
-    "https://github.com/abhay-ramesh",
-    "https://twitter.com/abhay__ramesh",
-  ],
-};
+function JsonLd() {
+  const jsonLd: Person = {
+    "@type": "Person",
+    name: "Abhay Ramesh",
+    jobTitle: "Software Engineer",
+    gender: "male",
+    height: "5' 10\"",
+    url: "https://abhayramesh.com",
+    image: "https://github.com/abhay-ramesh.png",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Banglore",
+      addressRegion: "Karnataka",
+      addressCountry: "India",
+    },
+    email: "ramesh.abhay14@gmail.com",
+    birthDate: "2002-07-14",
+    alumniOf: "PES University",
+    birthPlace: "Hassan",
+    sameAs: [
+      "https://www.linkedin.com/in/abhay-ramesh/",
+      "https://github.com/abhay-ramesh",
+      "https://twitter.com/abhay__ramesh",
+    ],
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  );
+}
 
-export { metadataVal, jsonLd };
+export { metadataVal, JsonLd };

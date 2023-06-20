@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { jsonLd, metadataVal } from "./seo_data";
+import { JsonLd, metadataVal } from "./seo_data";
+import { GoogleAnalytics } from "./GoogleAnalytics";
 
 export const metadata = metadataVal;
 
@@ -18,10 +19,8 @@ export default function RootLayout({
           inter.className + "  min-h-screen flex flex-col bg-[#030711]"
         }
       >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <JsonLd />
+        <GoogleAnalytics />
         <main className="flex flex-col w-full h-full pb-4 grow sm:pt-4">
           {children}
         </main>
