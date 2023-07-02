@@ -17,10 +17,10 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Build the Next.js application
-RUN pnpm run build
+RUN npm run build
 
 # Expose the default port for Next.js
 EXPOSE 3000
 
 # Start the Next.js server
-CMD ["pnpm", "run", "start"]
+CMD ["npm", "run", "start"]
