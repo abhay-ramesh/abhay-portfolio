@@ -20,9 +20,14 @@ steps:
       
   - name: Deploy
     image: plugins/webhook
+    environment:
+      WEBHOOK_ID:
+        from_secret: webhookID
+      WEBHOOK_ENDPOINT:
+        from_secret: PORTAINER_WEBHOOK_ENDPOINT
     settings:
       urls:
-        - https://portainer.abhayramesh.com/api/stacks/webhooks/97af7e95-f2ce-4ea9-b3c2-97d49ad44b0c
+        - ${WEBHOOK_ENDPOINT}${WEBHOOK_ID}
       content_type: application/json
       method: POST
   
