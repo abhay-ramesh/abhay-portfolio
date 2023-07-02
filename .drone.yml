@@ -27,7 +27,7 @@ steps:
         from_secret: WebhookID
     settings:
       urls: 
-        - {$WEBHOOK_URL}
+        from_secret: webhook
       content_type: application/json
       method: POST
   
