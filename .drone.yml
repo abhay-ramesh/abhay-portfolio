@@ -3,20 +3,20 @@ type: docker
 name: nextjs-ci
 
 steps:
-  - name: Install dependencies
-    image: node:20-alpine
-    commands:
-      - npm install
+  # - name: Install dependencies
+  #   image: node:20-alpine
+  #   commands:
+  #     - npm install
 
-  - name: Lint
-    image: node:20-alpine
-    commands:
-      - npm run lint
+  # - name: Lint
+  #   image: node:20-alpine
+  #   commands:
+  #     - npm run lint
 
-  - name: Build
-    image: node:20-alpine
-    commands:
-      - npm run build
+  # - name: Build
+  #   image: node:20-alpine
+  #   commands:
+  #     - npm run build
       
   - name: Deploy
     image: plugins/webhook
