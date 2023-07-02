@@ -21,13 +21,11 @@ steps:
   - name: Deploy
     image: plugins/webhook
     environment:
-      WEBHOOK_ID:
-        from_secret: webhookID
-      WEBHOOK_ENDPOINT:
-        from_secret: PORTAINER_WEBHOOK_ENDPOINT
+      WEBHOOK_URL:
+        from_secret: WEBHOOK_URL
     settings:
       urls:
-        - $WEBHOOK_ENDPOINT$WEBHOOK_ID
+        - ${WEBHOOK_URL}
       content_type: application/json
       method: POST
   
