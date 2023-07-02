@@ -3,14 +3,22 @@ type: docker
 name: nextjs-ci
 
 steps:
-  - name: Test and Build
+  - name: Install dependencies
     image: node:20-alpine
     commands:
-      - npm install -g pnpm
-      - pnpm install --frozen-lockfile
+      - npm install
+
+  - name: Lint
+    image: node:20-alpine
+    commands:
       - npm run lint
+
+  - name: Build
+    image: node:20-alpine
+    commands:
       - npm run build
-  - name: deploy
+      
+  - name: Deploy
     image: plugins/webhook
     settings:
       urls:
@@ -19,7 +27,8 @@ steps:
       method: POST
   
 trigger:
-  branch:
-    - main
+  event: 
+    - push
+    - pull_request
 
 
