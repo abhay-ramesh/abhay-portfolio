@@ -17,21 +17,33 @@ steps:
     image: node:20-alpine
     commands:
       - npm run build
-      
-  - name: Deploy
-    image: plugins/webhook
-    environment:
-      WEBHOOK_URL:
-        from_secret: WEBHOOK_URL
-    settings:
-      urls:
-        - $WEBHOOK_URL
-      content_type: application/json
-      method: POST
   
 trigger:
   event: 
     - push
     - pull_request
 
+---
+kind: pipeline
+type: docker
+name: nextjs-cd
+
+steps:
+  - name: Deploy
+    image: plugins/webhook
+    settings:
+      urls: 
+        from_secret: webhook
+      content_type: application/json
+      method: POST
+
+depends_on:
+  - nextjs-ci
+
+trigger:
+  event: 
+    - push
+    - pull_request
+  branch: 
+    - main
 
