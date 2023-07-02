@@ -23,9 +23,11 @@ steps:
     environment:
       WEBHOOK_URL:
         from_secret: WEBHOOK_URL
+      WEBHOOK_ID:
+        from_secret: WebhookID
     settings:
       urls:
-        - $WEBHOOK_URL
+        - https://portainer.abhayramesh.com/api/webhooks/$WEBHOOK_ID
       content_type: application/json
       method: POST
   
