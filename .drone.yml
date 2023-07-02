@@ -27,7 +27,7 @@ steps:
         from_secret: WebhookID
     settings:
       urls:
-        - https://portainer.abhayramesh.com/api/webhooks/${WEBHOOK_ID}
+        - https://portainer.abhayramesh.com/api/webhooks/ ${WEBHOOK_ID}
       content_type: application/json
       method: POST
   
