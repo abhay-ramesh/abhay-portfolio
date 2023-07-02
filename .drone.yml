@@ -22,7 +22,7 @@ steps:
     image: plugins/webhook
     environment:
       WEBHOOK_URL:
-        from_secret: ${WEBHOOK_URL}
+        from_secret: $WEBHOOK_URL
       WebhookID:
         from_secret: WebhookID
     settings:
