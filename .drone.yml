@@ -10,8 +10,13 @@ steps:
 
   - name: Lint
     image: node:20-alpine
+    environment:
+      WEBHOOK_URL:
+        from_secret: WEBHOOK_URL
     commands:
+      - echo $WEBHOOK_URL
       - npm run lint
+
 
   - name: Build
     image: node:20-alpine
