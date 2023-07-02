@@ -1,4 +1,11 @@
 {
   "promptDelete": false,
-  "newFileLocation": "current"
+  "newFileLocation": "current",
+  "userIgnoreFilters": [
+    "node_modules/",
+    "src/components/",
+    "src/lib/"
+  ],
+  "showUnsupportedFiles": false,
+  "alwaysUpdateLinks": true
 }

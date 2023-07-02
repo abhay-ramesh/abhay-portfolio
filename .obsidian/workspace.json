@@ -13,26 +13,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/app/page.mdx",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "25c56a2f8cbe70eb",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "src/app/Test/page.md",
+                "file": "src/app/v2/page.mdx",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -98,7 +85,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "src/app/Test/page.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +101,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "src/app/Test/page.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -137,9 +122,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "src/app/Test/page.md"
-              }
+              "state": {}
             }
           },
           {
@@ -169,11 +152,13 @@
   },
   "active": "d564ea7ffc38b943",
   "lastOpenFiles": [
-    "Untitled.md",
-    "src/app/Test/page.md",
-    "src/app/page.mdx",
-    "src/app/Test",
     "src/app/v2/page.mdx",
+    "src/app/v2/Untitled.md",
+    "src/app/page.mdx",
+    "src/app/Test/page.md",
+    "src/app/Test/page.mdx",
+    "Untitled.md",
+    "src/app/Test",
     "your-profile-picture-url.md"
   ]
 }
