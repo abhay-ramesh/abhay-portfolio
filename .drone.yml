@@ -3,37 +3,45 @@ type: docker
 name: nextjs-ci
 
 steps:
-  # - name: Install dependencies
-  #   image: node:20-alpine
-  #   commands:
-  #     - npm install
+  - name: Install dependencies
+    image: node:20-alpine
+    commands:
+      - npm install
 
-  # - name: Lint
-  #   image: node:20-alpine
-  #   commands:
-  #     - npm run lint
+  - name: Lint
+    image: node:20-alpine
+    commands:
+      - npm run lint
 
-  # - name: Build
-  #   image: node:20-alpine
-  #   commands:
-  #     - npm run build
-      
-  - name: Deploy
-    image: plugins/webhook
-    environment:
-      WEBHOOK_URL:
-        from_secret: webhook
-      WebhookID:
-        from_secret: WebhookID
-    settings:
-      urls: 
-        from_secret: webhook
-      content_type: application/json
-      method: POST
+  - name: Build
+    image: node:20-alpine
+    commands:
+      - npm run build
   
 trigger:
   event: 
     - push
     - pull_request
+
+---
+kind: pipeline
+type: docker
+name: nextjs-cd
+
+steps:
+  - name: Deploy
+    image: plugins/webhook
+    settings:
+      urls: 
+        from_secret: webhook
+      content_type: application/json
+      method: POST
+
+trigger:
+  event: 
+    - push
+    - pull_request
+  branch: 
+    - main
 
 
