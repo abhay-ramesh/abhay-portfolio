@@ -11,16 +11,16 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies using PNPM
-RUN npm install
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the application code
 COPY . .
 
 # Build the Next.js application
-RUN npm run build
+RUN pnpm run build
 
 # Expose the default port for Next.js
 EXPOSE 3000
 
 # Start the Next.js server
-CMD ["npm", "run", "start"]
+CMD ["pnpm", "run", "start"]
