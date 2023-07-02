@@ -10,3 +10,16 @@ steps:
       - pnpm install --frozen-lockfile
       - npm run lint
       - npm run build
+  - name: deploy
+    image: plugins/webhook
+    settings:
+      urls:
+        - https://portainer.abhayramesh.com/api/stacks/webhooks/97af7e95-f2ce-4ea9-b3c2-97d49ad44b0c
+      content_type: application/json
+      method: POST
+  
+trigger:
+  branch:
+    - main
+
+
