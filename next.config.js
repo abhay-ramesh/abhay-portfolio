@@ -5,7 +5,11 @@ const nextConfig = {
         mdxRs: true,
     },
     images: {
-        domains: ['images.unsplash.com', 'github.com', 'avatars.githubusercontent.com'],
+        domains: [
+            "images.unsplash.com",
+            "github.com",
+            "avatars.githubusercontent.com",
+        ],
     },
 }
 
