@@ -178,21 +178,23 @@ const TiltCard = ({ children }: { children: React.ReactNode }) => {
 
 const GeometricPattern = () => {
   return (
-    <div className="overflow-hidden fixed inset-0 pointer-events-none">
+    <div className="fixed inset-0 z-0 pointer-events-none">
+      {/* Small dots */}
       <div
-        className="absolute inset-0 opacity-[0.07]"
+        className="absolute inset-0 opacity-[0.28]"
         style={{
-          backgroundImage: `radial-gradient(circle at center, rgba(255,255,255,0.15) 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
-          backgroundPosition: "-19px -19px",
+          backgroundImage: `radial-gradient(circle at center, rgba(255,255,255,0.25) 1px, transparent 1px)`,
+          backgroundSize: "32px 32px",
+          backgroundPosition: "-16px -16px",
         }}
       />
+      {/* Large dots */}
       <div
-        className="absolute inset-0 opacity-[0.07]"
+        className="absolute inset-0 opacity-[0.05]"
         style={{
-          backgroundImage: `radial-gradient(circle at center, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: "160px 160px",
-          backgroundPosition: "-79px -79px",
+          backgroundImage: `radial-gradient(circle at center, rgba(255,255,255,0.2) 1px, transparent 1px)`,
+          backgroundSize: "64px 64px",
+          backgroundPosition: "-32px -32px",
         }}
       />
     </div>
@@ -231,13 +233,12 @@ const ProjectCard = ({ repo }: { repo: GitHubRepo }) => {
       viewport={{ once: true }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="relative group"
+      className="relative h-full group"
     >
+      {/* Background and border effects */}
       <motion.div
         className="absolute inset-0 rounded-lg opacity-20"
-        animate={{
-          opacity: isHovered ? 0.3 : 0.1,
-        }}
+        animate={{ opacity: isHovered ? 0.3 : 0.1 }}
         style={{
           background:
             "linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
@@ -332,71 +333,173 @@ const ProjectCard = ({ repo }: { repo: GitHubRepo }) => {
         transition={{ duration: 0.3 }}
       />
 
-      <div className="relative p-6">
-        {ogImage && (
-          <div className="overflow-hidden mb-6 rounded-lg aspect-video">
-            <img
-              src={ogImage}
-              alt={`${repo.name} preview`}
-              width={600}
-              height={338}
-              className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
-            />
+      <div className="flex relative flex-col p-4 h-full md:p-6">
+        {repo.homepage && (
+          <div className="overflow-hidden relative mb-4 rounded-lg aspect-video group/preview">
+            {ogImage ? (
+              <>
+                <div className="absolute top-0 right-0 left-0 p-4 bg-gradient-to-b to-transparent from-black/50">
+                  <div className="flex gap-2 items-center">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                    <span className="text-xs font-medium text-white/80">
+                      Live
+                    </span>
+                  </div>
+                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={ogImage}
+                  alt={`${repo.name} preview`}
+                  width={600}
+                  height={338}
+                  className="object-cover w-full h-full transition-transform duration-300 group-hover/preview:scale-105"
+                />
+                <div className="flex absolute inset-0 flex-col justify-center items-center opacity-0 transition-opacity duration-300 bg-black/80 group-hover/preview:opacity-100">
+                  <div className="absolute top-0 right-0 left-0 p-4 bg-gradient-to-b to-transparent from-black/50">
+                    <div className="flex gap-2 items-center">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                      <span className="text-xs font-medium text-white/80">
+                        Live
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-3 items-center p-6 text-center">
+                    <a
+                      href={repo.homepage}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-3 rounded-full bg-white/10"
+                    >
+                      <motion.svg
+                        className="w-6 h-6 text-white transition-all duration-300 group-hover/preview:h-8 group-hover/preview:w-8"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        />
+                      </motion.svg>
+                    </a>
+                    <div className="space-y-1">
+                      <h4 className="text-sm font-medium text-white/90">
+                        {repo.name}
+                      </h4>
+                      <p className="text-xs text-white/60 break-all max-w-[250px]">
+                        {repo.homepage}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="absolute right-0 bottom-0 left-0 h-12 bg-gradient-to-t to-transparent from-black/50" />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex relative flex-col justify-center items-center w-full h-full bg-gradient-to-br to-transparent from-white/10 via-white/5">
+                  <div className="absolute top-0 right-0 left-0 p-4 bg-gradient-to-b to-transparent from-black/50">
+                    <div className="flex gap-2 items-center">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                      <span className="text-xs font-medium text-white/80">
+                        Live
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3 items-center p-6 text-center">
+                    <a
+                      href={repo.homepage}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-3 rounded-full bg-white/10"
+                    >
+                      <motion.svg
+                        className="w-6 h-6 text-white transition-all duration-300 group-hover/preview:h-8 group-hover/preview:w-8"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        />
+                      </motion.svg>
+                    </a>
+                    <div className="space-y-1">
+                      <h4 className="text-sm font-medium text-white/90">
+                        {repo.name}
+                      </h4>
+                      <p className="text-xs text-white/60 break-all max-w-[250px]">
+                        {repo.homepage}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="absolute right-0 bottom-0 left-0 h-12 bg-gradient-to-t to-transparent from-black/50" />
+                </div>
+              </>
+            )}
           </div>
         )}
 
-        <div className="flex justify-between items-start mb-4">
-          <h3 className="text-2xl font-bold font-clash">{repo.name}</h3>
-          <div className="flex gap-4 items-center">
-            <div className="flex gap-2 items-center">
-              <svg
-                className="w-4 h-4 text-yellow-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              <span className="text-white/60">{repo.stargazers_count}</span>
+        <div className="flex flex-col flex-grow">
+          <div className="flex flex-col justify-between items-start mb-3 md:mb-4 md:flex-row md:items-center">
+            <h3 className="mb-2 text-lg font-bold md:text-2xl font-clash md:mb-0">
+              {repo.name}
+            </h3>
+            <div className="flex flex-wrap gap-2 md:gap-3">
+              <div className="flex items-center gap-1.5">
+                <svg
+                  className="w-4 h-4 text-yellow-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <span className="text-white/60">{repo.stargazers_count}</span>
+              </div>
+              {repo.language && (
+                <span className="px-2 py-1 text-xs whitespace-nowrap rounded md:text-sm bg-white/10">
+                  {repo.language}
+                </span>
+              )}
             </div>
-            {repo.language && (
-              <span className="px-2 py-1 text-sm rounded bg-white/10">
-                {repo.language}
-              </span>
-            )}
           </div>
-        </div>
 
-        <p className="mb-6 text-white/60 line-clamp-2">{repo.description}</p>
+          <p className="mb-3 text-sm md:text-base text-white/60 line-clamp-2 md:mb-4">
+            {repo.description}
+          </p>
 
-        <motion.div
-          className="flex gap-4 mt-auto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered ? 1 : 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <motion.a
-            href={repo.html_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-4 py-2 text-sm font-medium text-white rounded transition-all bg-white/10 hover:bg-white hover:text-black"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            View Code
-          </motion.a>
-          {repo.homepage && (
+          <div className="flex flex-col gap-2 mt-auto sm:flex-row sm:gap-4">
             <motion.a
-              href={repo.homepage}
+              href={repo.html_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 text-sm font-medium text-white rounded transition-all bg-white/10 hover:bg-white hover:text-black"
+              className="flex-1 px-3 py-2 text-sm font-medium text-center text-white rounded transition-all bg-white/10 hover:bg-white hover:text-black"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Live Demo
+              View Code
             </motion.a>
-          )}
-        </motion.div>
+            {repo.homepage && (
+              <motion.a
+                href={repo.homepage}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 px-3 py-2 text-sm font-medium text-center text-white rounded transition-all bg-white/10 hover:bg-white hover:text-black"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Live Demo
+              </motion.a>
+            )}
+          </div>
+        </div>
       </div>
     </motion.div>
   );
@@ -542,6 +645,7 @@ const FormInput = ({
 const Navigation = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const sections = [
     "home",
     "about",
@@ -595,46 +699,113 @@ const Navigation = () => {
       top: offsetPosition,
       behavior: "smooth",
     });
+    setIsMobileMenuOpen(false);
   };
 
   return (
-    <motion.nav
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 1 }}
-      className="flex fixed top-0 bottom-0 right-8 z-50 items-center pointer-events-none"
-    >
-      <div className="flex flex-col gap-6">
-        {sections.map((section) => (
-          <motion.button
-            key={section}
-            onClick={() => scrollToSection(section)}
-            onMouseEnter={() => setHoveredSection(section)}
-            onMouseLeave={() => setHoveredSection(null)}
-            className="flex relative justify-end items-center pr-2 h-8 pointer-events-auto group"
-            whileHover={{ x: -8 }}
-            transition={{ duration: 0.2 }}
-          >
-            <span
-              className={`absolute right-8 text-sm capitalize transition-all duration-200 ${
-                hoveredSection === section
-                  ? "opacity-100 text-white translate-x-0"
-                  : "opacity-0 text-white/60 translate-x-2"
-              }`}
+    <>
+      {/* Desktop Navigation */}
+      <motion.nav
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1 }}
+        className="hidden fixed top-0 bottom-0 right-8 z-50 items-center pointer-events-none md:flex"
+      >
+        <div className="flex flex-col gap-6">
+          {sections.map((section) => (
+            <motion.button
+              key={section}
+              onClick={() => scrollToSection(section)}
+              onMouseEnter={() => setHoveredSection(section)}
+              onMouseLeave={() => setHoveredSection(null)}
+              className="flex relative justify-end items-center pr-2 h-8 pointer-events-auto group"
+              whileHover={{ x: -8 }}
+              transition={{ duration: 0.2 }}
             >
-              {section}
-            </span>
-            <div
-              className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                activeSection === section
-                  ? "bg-white scale-125"
-                  : "bg-white/20 group-hover:bg-white/60"
-              }`}
-            />
-          </motion.button>
-        ))}
+              <span
+                className={`absolute right-8 text-sm capitalize transition-all duration-200 ${
+                  hoveredSection === section
+                    ? "opacity-100 text-white translate-x-0"
+                    : "opacity-0 text-white/60 translate-x-2"
+                }`}
+              >
+                {section}
+              </span>
+              <div
+                className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                  activeSection === section
+                    ? "bg-white scale-125"
+                    : "bg-white/20 group-hover:bg-white/60"
+                }`}
+              />
+            </motion.button>
+          ))}
+        </div>
+      </motion.nav>
+
+      {/* Mobile Navigation */}
+      <div className="fixed right-0 bottom-0 left-0 z-50 md:hidden">
+        {/* Mobile Menu Button */}
+        <motion.button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="absolute right-6 bottom-6 p-3 rounded-full backdrop-blur-sm bg-white/10"
+          whileTap={{ scale: 0.95 }}
+        >
+          <svg
+            className="w-6 h-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            {isMobileMenuOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
+          </svg>
+        </motion.button>
+
+        {/* Mobile Menu */}
+        <motion.div
+          className="absolute right-6 bottom-24 p-2 rounded-lg backdrop-blur-sm bg-black/80"
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{
+            opacity: isMobileMenuOpen ? 1 : 0,
+            y: isMobileMenuOpen ? 0 : 20,
+            scale: isMobileMenuOpen ? 1 : 0.95,
+          }}
+          transition={{ duration: 0.2 }}
+          style={{ pointerEvents: isMobileMenuOpen ? "auto" : "none" }}
+        >
+          <div className="flex flex-col gap-2">
+            {sections.map((section) => (
+              <motion.button
+                key={section}
+                onClick={() => scrollToSection(section)}
+                className={`px-6 py-3 text-sm font-medium rounded-lg transition-colors ${
+                  activeSection === section
+                    ? "bg-white text-black"
+                    : "text-white/60 hover:bg-white/10"
+                }`}
+                whileTap={{ scale: 0.98 }}
+              >
+                {section.charAt(0).toUpperCase() + section.slice(1)}
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
       </div>
-    </motion.nav>
+    </>
   );
 };
 
@@ -766,20 +937,20 @@ const ParallaxBackground = () => {
   const y2 = useTransform(scrollY, [0, 1000], [0, -200]);
 
   return (
-    <div className="overflow-hidden fixed inset-0 pointer-events-none">
+    <div className="fixed inset-0 z-0 pointer-events-none">
       <motion.div
-        className="absolute -inset-40 opacity-30"
+        className="absolute -inset-40 opacity-50"
         style={{
           background:
-            "radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%)",
+            "radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%)",
           y: y1,
         }}
       />
       <motion.div
-        className="absolute -inset-40 opacity-20"
+        className="absolute -inset-40 opacity-30"
         style={{
           background:
-            "radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, transparent 60%)",
+            "radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 60%)",
           y: y2,
         }}
       />
@@ -852,16 +1023,16 @@ const ScrambleText = ({ text }: { text: string }) => {
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-100px" }}
       onViewportEnter={() => setIsInView(true)}
-      className="flex relative items-center mb-16"
+      className="flex relative items-center mb-8 md:mb-16"
     >
       <motion.div
         initial={{ scaleX: 0 }}
         whileInView={{ scaleX: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
-        className="w-2 h-16 bg-white origin-left"
+        className="w-1 h-12 bg-white origin-left md:w-2 md:h-16"
       />
-      <h2 className="pl-4 text-7xl font-bold tracking-tighter font-clash">
+      <h2 className="pl-4 text-4xl font-bold tracking-tighter md:text-7xl font-clash">
         {displayText}
       </h2>
     </motion.div>
@@ -967,7 +1138,7 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
       viewport={{ once: true }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="relative group"
+      className="relative h-full group"
     >
       <motion.div
         className="absolute inset-0 rounded-lg opacity-20"
@@ -979,17 +1150,85 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
             "linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
         }}
       />
+
+      {/* Animated border container */}
       <motion.div
-        className="absolute inset-0 rounded-lg"
-        animate={{
-          opacity: isHovered ? 1 : 0,
-        }}
-        transition={{ duration: 0.3 }}
-        style={{
-          background:
-            "linear-gradient(90deg, rgba(255,255,255,0.1) 0%, transparent 100%)",
-        }}
-      />
+        className="overflow-hidden absolute inset-0 rounded-lg"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.2 }}
+      >
+        {/* Border animations */}
+        <motion.div
+          className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white to-transparent"
+          initial={{ x: "-100%" }}
+          animate={
+            isHovered
+              ? {
+                  x: ["100%", "-100%"],
+                }
+              : { x: "-100%" }
+          }
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+        <motion.div
+          className="absolute top-0 right-0 w-[1px] h-full bg-gradient-to-b from-transparent via-white to-transparent"
+          initial={{ y: "-100%" }}
+          animate={
+            isHovered
+              ? {
+                  y: ["100%", "-100%"],
+                }
+              : { y: "-100%" }
+          }
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "linear",
+            delay: 0.5,
+          }}
+        />
+        <motion.div
+          className="absolute bottom-0 right-0 w-full h-[1px] bg-gradient-to-l from-transparent via-white to-transparent"
+          initial={{ x: "100%" }}
+          animate={
+            isHovered
+              ? {
+                  x: ["-100%", "100%"],
+                }
+              : { x: "100%" }
+          }
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "linear",
+            delay: 1,
+          }}
+        />
+        <motion.div
+          className="absolute top-0 left-0 w-[1px] h-full bg-gradient-to-t from-transparent via-white to-transparent"
+          initial={{ y: "100%" }}
+          animate={
+            isHovered
+              ? {
+                  y: ["-100%", "100%"],
+                }
+              : { y: "100%" }
+          }
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "linear",
+            delay: 1.5,
+          }}
+        />
+      </motion.div>
+
+      {/* Static border */}
       <motion.div
         className="absolute inset-0 rounded-lg border border-white/10"
         animate={{
@@ -1000,21 +1239,31 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
         transition={{ duration: 0.3 }}
       />
 
-      <div className="relative p-6">
-        <div className="flex gap-4 mb-4">
+      <div className="flex relative flex-col p-4 h-full md:p-6">
+        <div className="flex flex-wrap gap-2 mb-4">
           {post.tags.map((tag) => (
-            <span key={tag} className="px-2 py-1 text-sm rounded bg-white/10">
+            <span
+              key={tag}
+              className="px-2 py-1 text-xs whitespace-nowrap rounded md:text-sm bg-white/10"
+            >
               {tag}
             </span>
           ))}
         </div>
 
-        <h3 className="mb-4 text-2xl font-bold font-clash">{post.title}</h3>
-        <p className="mb-6 text-white/60 line-clamp-2">{post.excerpt}</p>
+        <div className="flex flex-col flex-grow">
+          <h3 className="mb-3 text-xl font-bold md:text-2xl font-clash md:mb-4">
+            {post.title}
+          </h3>
 
-        <div className="flex justify-between items-center mt-auto text-sm text-white/40">
-          <span>{post.date}</span>
-          <span>{post.readTime} read</span>
+          <p className="flex-grow mb-4 text-sm md:text-base text-white/60 line-clamp-2 md:mb-6">
+            {post.excerpt}
+          </p>
+
+          <div className="flex justify-between items-center mt-auto text-xs md:text-sm text-white/40">
+            <span>{post.date}</span>
+            <span>{post.readTime} read</span>
+          </div>
         </div>
 
         <motion.div
@@ -1188,7 +1437,7 @@ export default function PortfolioV3() {
         className="relative min-h-screen text-white bg-[#0A0A0A] font-satoshi"
       >
         <GeometricPattern />
-        <ParallaxBackground />
+        {/* <ParallaxBackground /> */}
         <Navigation />
 
         {/* Progress Bar */}
@@ -1201,7 +1450,7 @@ export default function PortfolioV3() {
           {/* Hero Section */}
           <section
             id="home"
-            className="flex overflow-hidden relative flex-col justify-center items-center px-16 min-h-screen border-b border-white/10"
+            className="flex overflow-hidden relative flex-col justify-center items-center px-4 min-h-screen border-b md:px-16 border-white/10"
           >
             {/* Animated Background */}
             {/* <motion.div
@@ -1219,12 +1468,12 @@ export default function PortfolioV3() {
               }}
             /> */}
 
-            {/* Profile Image with enhanced animation */}
+            {/* Profile Image */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="relative mb-12 group"
+              className="relative mb-8 md:mb-12 group"
             >
               <motion.div
                 className="absolute -inset-0.5 bg-white opacity-20 rounded-full blur-sm group-hover:opacity-30 transition-opacity"
@@ -1237,7 +1486,7 @@ export default function PortfolioV3() {
                   ease: "easeInOut",
                 }}
               />
-              <div className="relative w-48 h-48">
+              <div className="relative w-32 h-32 md:w-48 md:h-48">
                 <Image
                   src="https://github.com/abhay-ramesh.png"
                   alt="Abhay Ramesh"
@@ -1248,10 +1497,10 @@ export default function PortfolioV3() {
               </div>
             </motion.div>
 
-            {/* Name with enhanced animation */}
-            <div className="overflow-hidden mb-6">
+            {/* Name */}
+            <div className="overflow-hidden mb-4 md:mb-6">
               <motion.h1
-                className="text-8xl font-bold tracking-tighter font-clash"
+                className="text-4xl font-bold tracking-tighter text-center md:text-8xl font-clash"
                 initial={{ y: 100 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
@@ -1267,7 +1516,7 @@ export default function PortfolioV3() {
                 "UI/UX DESIGNER",
                 "OPEN SOURCE CONTRIBUTOR",
               ]}
-              className="mb-8 text-2xl font-light tracking-widest uppercase text-white/80"
+              className="mb-6 text-lg font-light tracking-widest text-center uppercase md:mb-8 md:text-2xl text-white/80"
             />
 
             {/* Enhanced social links */}
@@ -1292,7 +1541,7 @@ export default function PortfolioV3() {
           {/* About Section */}
           <section
             id="about"
-            className="flex justify-center items-center px-16 min-h-screen border-b border-white/10"
+            className="flex justify-center items-center px-4 py-16 min-h-screen border-b md:px-16 md:py-32 border-white/10"
           >
             <div className="max-w-4xl">
               <ScrambleText text="ABOUT" />
@@ -1301,12 +1550,12 @@ export default function PortfolioV3() {
                 initial="initial"
                 whileInView="animate"
                 viewport={{ once: true }}
-                className="grid grid-cols-2 gap-24"
+                className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-24"
               >
-                <div className="space-y-8">
+                <div className="space-y-6 md:space-y-8">
                   <motion.p
                     variants={fadeInUp}
-                    className="text-xl leading-relaxed text-white/80"
+                    className="text-lg leading-relaxed md:text-xl text-white/80"
                   >
                     I craft digital experiences with clean code and bold design.
                     Specializing in modern web technologies, I build scalable
@@ -1314,20 +1563,23 @@ export default function PortfolioV3() {
                   </motion.p>
                   <motion.p
                     variants={fadeInUp}
-                    className="text-xl leading-relaxed text-white/80"
+                    className="text-lg leading-relaxed md:text-xl text-white/80"
                   >
                     My approach combines technical excellence with minimalistic
                     design principles.
                   </motion.p>
                 </div>
                 <div>
-                  <motion.div variants={fadeInUp} className="space-y-12">
+                  <motion.div
+                    variants={fadeInUp}
+                    className="space-y-8 md:space-y-12"
+                  >
                     <div>
-                      <h3 className="mb-8 text-2xl font-bold tracking-wide font-clash">
+                      <h3 className="mb-6 text-xl font-bold tracking-wide md:mb-8 md:text-2xl font-clash">
                         SKILLS
                       </h3>
                       <motion.div
-                        className="grid grid-cols-1 gap-6"
+                        className="grid grid-cols-1 gap-4 md:gap-6"
                         variants={staggerContainer}
                         initial="initial"
                         whileInView="animate"
@@ -1351,10 +1603,10 @@ export default function PortfolioV3() {
           {/* Experience Section */}
           <section
             id="experience"
-            className="px-16 py-32 min-h-screen border-b border-white/10"
+            className="px-4 py-16 min-h-screen border-b md:px-16 md:py-32 border-white/10"
           >
             <ScrambleText text="EXPERIENCE" />
-            <div className="space-y-16">
+            <div className="space-y-12 md:space-y-16">
               {experiences.map((exp, index) => (
                 <motion.div
                   key={index}
@@ -1364,14 +1616,18 @@ export default function PortfolioV3() {
                   viewport={{ once: true }}
                   className="group"
                 >
-                  <div className="flex justify-between items-baseline mb-4">
-                    <h3 className="text-3xl font-bold font-clash">
+                  <div className="flex flex-col justify-between items-start mb-4 md:flex-row md:items-baseline">
+                    <h3 className="mb-2 text-2xl font-bold md:text-3xl font-clash md:mb-0">
                       {exp.role}
                     </h3>
                     <span className="text-white/60">{exp.period}</span>
                   </div>
-                  <p className="text-xl text-white/80">{exp.company}</p>
-                  <p className="mt-4 text-white/60">{exp.description}</p>
+                  <p className="text-lg md:text-xl text-white/80">
+                    {exp.company}
+                  </p>
+                  <p className="mt-4 text-sm md:text-base text-white/60">
+                    {exp.description}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -1380,7 +1636,7 @@ export default function PortfolioV3() {
           {/* Projects Section */}
           <section
             id="projects"
-            className="px-16 py-32 min-h-screen border-b border-white/10"
+            className="px-4 py-16 min-h-screen border-b md:px-16 md:py-32 border-white/10"
           >
             <ScrambleText text="PROJECTS" />
 
@@ -1390,21 +1646,21 @@ export default function PortfolioV3() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
-              className="mx-auto mb-16 w-fit"
+              className="overflow-x-auto mx-auto mb-12 w-full md:mb-16"
             >
-              <div className="flex justify-between items-baseline mb-8">
-                <h3 className="text-2xl font-bold font-clash">
+              <div className="flex flex-col justify-between items-start mb-6 md:flex-row md:items-baseline md:mb-8">
+                <h3 className="mb-2 text-xl font-bold md:text-2xl font-clash md:mb-0">
                   GITHUB ACTIVITY
                 </h3>
                 {contributions.length > 0 && (
-                  <span className="text-white/60">
+                  <span className="text-sm md:text-base text-white/60">
                     {contributions.reduce((acc, curr) => acc + curr.count, 0)}{" "}
                     contributions in the last year
                   </span>
                 )}
               </div>
 
-              <div className="relative">
+              <div className="min-w-[750px] md:min-w-0">
                 <div className="flex">
                   {/* Days of week labels */}
                   <div
@@ -1508,7 +1764,7 @@ export default function PortfolioV3() {
             </motion.div>
 
             {/* GitHub Repositories */}
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 md:gap-8 md:grid-cols-2">
               {pinnedRepos.map((repo) => (
                 <ProjectCard key={repo.name} repo={repo} />
               ))}
@@ -1518,7 +1774,7 @@ export default function PortfolioV3() {
           {/* Blog Section */}
           <section
             id="blog"
-            className="px-16 py-32 min-h-screen border-b border-white/10"
+            className="px-4 py-16 min-h-screen border-b md:px-16 md:py-32 border-white/10"
           >
             <ScrambleText text="BLOG" />
             <motion.p
@@ -1526,13 +1782,13 @@ export default function PortfolioV3() {
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
               viewport={{ once: true }}
-              className="mb-12 text-xl text-white/80"
+              className="mb-8 text-lg md:mb-12 md:text-xl text-white/80"
             >
               Thoughts, learnings, and insights about web development and
               design.
             </motion.p>
 
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 md:gap-8 md:grid-cols-2">
               {sampleBlogPosts.map((post) => (
                 <BlogCard key={post.slug} post={post} />
               ))}
@@ -1542,7 +1798,7 @@ export default function PortfolioV3() {
           {/* Contact Section */}
           <section
             id="contact"
-            className="flex justify-center items-center px-16 min-h-screen"
+            className="flex justify-center items-center px-4 py-16 min-h-screen md:px-16 md:py-32"
           >
             <div className="w-full max-w-4xl text-center">
               <ScrambleText text="LETS CONNECT" />
@@ -1551,12 +1807,12 @@ export default function PortfolioV3() {
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
                 viewport={{ once: true }}
-                className="mb-12 text-xl text-white/80"
+                className="mb-8 text-lg md:mb-12 md:text-xl text-white/80"
               >
                 Open to new opportunities and collaborations.
               </motion.p>
 
-              <form className="mx-auto mt-12 space-y-6 max-w-xl">
+              <form className="mx-auto mt-8 space-y-4 max-w-xl md:mt-12 md:space-y-6">
                 <FormInput label="Name" name="name" required />
                 <FormInput label="Email" type="email" name="email" required />
                 <FormInput
@@ -1570,7 +1826,7 @@ export default function PortfolioV3() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="py-4 w-full font-medium text-black bg-white rounded-lg transition-colors hover:bg-white/90"
+                  className="py-3 w-full font-medium text-black bg-white rounded-lg transition-colors md:py-4 hover:bg-white/90"
                 >
                   Send Message
                 </motion.button>
@@ -1581,21 +1837,21 @@ export default function PortfolioV3() {
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
                 viewport={{ once: true }}
-                className="flex gap-8 justify-center mt-16"
+                className="flex flex-col gap-4 justify-center mt-12 md:flex-row md:gap-8 md:mt-16"
               >
                 <motion.a
                   whileHover={{ y: -2 }}
                   href="https://www.linkedin.com/in/abhay-ramesh/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-lg tracking-[0.3em] text-white/60 hover:text-white transition-colors font-medium"
+                  className="text-base md:text-lg tracking-[0.3em] text-white/60 hover:text-white transition-colors font-medium"
                 >
                   LINKEDIN
                 </motion.a>
                 <motion.a
                   whileHover={{ y: -2 }}
                   href="mailto:contact@abhayramesh.com"
-                  className="text-lg tracking-[0.3em] text-white/60 hover:text-white transition-colors font-medium"
+                  className="text-base md:text-lg tracking-[0.3em] text-white/60 hover:text-white transition-colors font-medium"
                 >
                   EMAIL
                 </motion.a>
