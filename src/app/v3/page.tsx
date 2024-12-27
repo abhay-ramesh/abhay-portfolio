@@ -215,6 +215,14 @@ const ProjectCard = ({ repo }: { repo: GitHubRepo }) => {
           const data = await response.json();
           if (data.ogImage) {
             setOgImage(data.ogImage);
+          } else {
+            const response = await fetch(
+              `/api/og?url=${encodeURIComponent(repo.html_url)}`
+            );
+            const data = await response.json();
+            if (data.ogImage) {
+              setOgImage(data.ogImage);
+            }
           }
         } catch (error) {
           console.error("Error fetching OG image:", error);
@@ -335,7 +343,7 @@ const ProjectCard = ({ repo }: { repo: GitHubRepo }) => {
 
       <div className="flex relative flex-col p-4 h-full md:p-6">
         {repo.homepage && (
-          <div className="overflow-hidden relative mb-4 rounded-lg aspect-video group/preview">
+          <div className="overflow-hidden relative mb-4 rounded-lg aspect-[1200/630] group/preview">
             {ogImage ? (
               <>
                 <div className="absolute top-0 right-0 left-0 p-4 bg-gradient-to-b to-transparent from-black/50">
@@ -350,8 +358,8 @@ const ProjectCard = ({ repo }: { repo: GitHubRepo }) => {
                 <img
                   src={ogImage}
                   alt={`${repo.name} preview`}
-                  width={600}
-                  height={338}
+                  //   width={600}
+                  //   height={338}
                   className="object-cover w-full h-full transition-transform duration-300 group-hover/preview:scale-105"
                 />
                 <div className="flex absolute inset-0 flex-col justify-center items-center opacity-0 transition-opacity duration-300 bg-black/80 group-hover/preview:opacity-100">
