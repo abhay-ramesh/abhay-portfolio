@@ -243,6 +243,22 @@ We also need to set up our SDK package configuration:
 >
 > This command will fetch the OpenAPI spec from your FastAPI backend and generate the type-safe SDK. Remember to run this command whenever you make changes to your API endpoints or models.
 
+### Next.js Configuration
+
+For the types to be properly recognized in your Next.js application, you need to add the SDK package to the `transpilePackages` configuration in your `next.config.js`:
+
+```javascript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  transpilePackages: ["@acme/sdk"],
+  // ... other Next.js config
+};
+
+module.exports = nextConfig;
+```
+
+This ensures that Next.js correctly processes and recognizes the types from your SDK package.
+
 ## SDK Initialization and Configuration
 
 Before we can use the SDK, we need to add it as a dependency in our client application's `package.json`. We'll use [pnpm](https://pnpm.io/) for package management:
