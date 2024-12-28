@@ -39,3 +39,6 @@ next-env.d.ts
 
 # Portainer
 portainer.dev.yml
+
+# contentlayer
+.contentlayer

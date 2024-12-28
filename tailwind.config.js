@@ -70,14 +70,10 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
-    },
-    fontFamily: {
-      sans: ["var(--font-inter)", "sans-serif"],
-      serif: ["var(--font-satoshi)", "serif"],
-      display: ["var(--font-clash)", "sans-serif"],
-      inter: ["var(--font-inter)", "sans-serif"],
-      clash: ["var(--font-clash)", "sans-serif"],
-      satoshi: ["var(--font-satoshi)", "serif"],
+      fontFamily: {
+        clash: ['ClashDisplay', 'sans-serif'],
+        satoshi: ['Satoshi', 'sans-serif'],
+      },
     },
   },
   plugins: [

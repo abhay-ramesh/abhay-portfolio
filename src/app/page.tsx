@@ -1,9 +1,11 @@
 "use client";
 
+import { allPosts, Post } from "contentlayer/generated";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -183,18 +185,27 @@ const GeometricPattern = () => {
       <div
         className="absolute inset-0 opacity-[0.28]"
         style={{
-          backgroundImage: `radial-gradient(circle at center, rgba(255,255,255,0.25) 1px, transparent 1px)`,
-          backgroundSize: "32px 32px",
-          backgroundPosition: "-16px -16px",
+          backgroundImage: `radial-gradient(circle at center, rgba(255,255,255,0.25) 0.5px, transparent 0.5px)`,
+          backgroundSize: "16px 16px",
+          backgroundPosition: "-8px -8px",
+        }}
+      />
+      {/* Medium dots */}
+      <div
+        className="absolute inset-0 opacity-[0.25]"
+        style={{
+          backgroundImage: `radial-gradient(circle at center, rgba(255,255,255,0.2) 1px, transparent 1px)`,
+          backgroundSize: "48px 48px",
+          backgroundPosition: "-24px -24px",
         }}
       />
       {/* Large dots */}
       <div
-        className="absolute inset-0 opacity-[0.05]"
+        className="absolute inset-0 opacity-[0.2]"
         style={{
-          backgroundImage: `radial-gradient(circle at center, rgba(255,255,255,0.2) 1px, transparent 1px)`,
-          backgroundSize: "64px 64px",
-          backgroundPosition: "-32px -32px",
+          backgroundImage: `radial-gradient(circle at center, rgba(255,255,255,0.15) 1.5px, transparent 1.5px)`,
+          backgroundSize: "96px 96px",
+          backgroundPosition: "-48px -48px",
         }}
       />
     </div>
@@ -1135,7 +1146,7 @@ const SocialLinks = () => {
   );
 };
 
-const BlogCard = ({ post }: { post: BlogPost }) => {
+const BlogCard = ({ post }: { post: Post }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -1249,7 +1260,7 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
 
       <div className="flex relative flex-col p-4 h-full md:p-6">
         <div className="flex flex-wrap gap-2 mb-4">
-          {post.tags.map((tag) => (
+          {post.tags.map((tag: string) => (
             <span
               key={tag}
               className="px-2 py-1 text-xs whitespace-nowrap rounded md:text-sm bg-white/10"
@@ -1269,7 +1280,13 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
           </p>
 
           <div className="flex justify-between items-center mt-auto text-xs md:text-sm text-white/40">
-            <span>{post.date}</span>
+            <span>
+              {new Date(post.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
             <span>{post.readTime} read</span>
           </div>
         </div>
@@ -1278,57 +1295,24 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
           className="flex absolute inset-0 justify-center items-center rounded-lg opacity-0 bg-black/80"
           animate={{ opacity: isHovered ? 1 : 0 }}
         >
-          <motion.button
-            className="px-6 py-3 text-sm font-medium text-black bg-white rounded-lg"
-            initial={{ scale: 0.9 }}
-            animate={{ scale: isHovered ? 1 : 0.9 }}
-          >
-            Read More
-          </motion.button>
+          <Link href={`/blog/${post.slug}`}>
+            <motion.button
+              className="px-6 py-3 text-sm font-medium text-black bg-white rounded-lg"
+              initial={{ scale: 0.9 }}
+              animate={{ scale: isHovered ? 1 : 0.9 }}
+            >
+              Read More
+            </motion.button>
+          </Link>
         </motion.div>
       </div>
     </motion.div>
   );
 };
 
-const sampleBlogPosts: BlogPost[] = [
-  {
-    title: "Building a Modern Portfolio with Next.js and Framer Motion",
-    excerpt:
-      "A deep dive into creating smooth animations and transitions in React applications using Framer Motion.",
-    date: "Dec 15, 2023",
-    readTime: "5 min",
-    slug: "modern-portfolio-nextjs",
-    tags: ["Next.js", "React", "Animation"],
-  },
-  {
-    title: "The Power of Server Components in Next.js 13",
-    excerpt:
-      "Exploring the benefits and implementation details of Server Components in Next.js applications.",
-    date: "Dec 10, 2023",
-    readTime: "4 min",
-    slug: "server-components-nextjs",
-    tags: ["Next.js", "Performance", "React"],
-  },
-  {
-    title: "Mastering TypeScript: Advanced Patterns and Best Practices",
-    excerpt:
-      "Learn advanced TypeScript patterns and techniques to write more maintainable code.",
-    date: "Dec 5, 2023",
-    readTime: "6 min",
-    slug: "typescript-advanced-patterns",
-    tags: ["TypeScript", "JavaScript", "Development"],
-  },
-  {
-    title: "Creating Custom Hooks in React: A Practical Guide",
-    excerpt:
-      "A comprehensive guide to creating and using custom hooks in React applications.",
-    date: "Nov 30, 2023",
-    readTime: "4 min",
-    slug: "react-custom-hooks",
-    tags: ["React", "Hooks", "JavaScript"],
-  },
-];
+const blogPosts = allPosts.sort(
+  (a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
 
 export default function PortfolioV3() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1797,7 +1781,7 @@ export default function PortfolioV3() {
             </motion.p>
 
             <div className="grid grid-cols-1 gap-6 md:gap-8 md:grid-cols-2">
-              {sampleBlogPosts.map((post) => (
+              {blogPosts.map((post) => (
                 <BlogCard key={post.slug} post={post} />
               ))}
             </div>
