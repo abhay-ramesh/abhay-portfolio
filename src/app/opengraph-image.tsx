@@ -68,16 +68,89 @@ export default async function Image() {
           }}
         />
 
-        {/* Content Container */}
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            gap: 40,
+            gap: 10,
             zIndex: 1,
             width: "100%",
+            justifyContent: "space-between",
+            alignItems: "center",
+            position: "relative",
+            height: "100%",
           }}
         >
+          {/* Content Container */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 40,
+              zIndex: 1,
+            }}
+          >
+            {/* Title */}
+            <div
+              style={{
+                fontSize: 84,
+                color: "#ffffff",
+                lineHeight: 1,
+                fontWeight: 900,
+                letterSpacing: "-0.02em",
+                maxWidth: "85%",
+                textShadow: "0 4px 20px rgba(0,0,0,0.7)",
+
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Abhay Ramesh
+            </div>
+
+            {/* Subtitle */}
+            <div
+              style={{
+                fontSize: 36,
+                color: "rgba(255, 255, 255, 0.9)",
+                lineHeight: 1.4,
+                maxWidth: "70%",
+                fontWeight: 500,
+                textShadow: "0 2px 12px rgba(0,0,0,0.5)",
+              }}
+            >
+              Full Stack Developer crafting modern web apps
+            </div>
+
+            {/* Tech Stack */}
+            <div
+              style={{
+                display: "flex",
+                gap: 16,
+                zIndex: 1,
+              }}
+            >
+              {["TypeScript", "React", "Next.js", "Python", "FastAPI"].map(
+                (tech) => (
+                  <div
+                    key={tech}
+                    style={{
+                      background: "rgba(255, 255, 255, 0.15)",
+                      color: "#ffffff",
+                      padding: "12px 24px",
+                      borderRadius: 12,
+                      fontSize: 18,
+                      fontWeight: 600,
+                      letterSpacing: "-0.01em",
+                      border: "1.5px solid rgba(255, 255, 255, 0.3)",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                    }}
+                  >
+                    {tech}
+                  </div>
+                )
+              )}
+            </div>
+          </div>
           {/* Author Section */}
           <div
             style={{
@@ -93,77 +166,14 @@ export default async function Image() {
               src="https://github.com/abhay-ramesh.png"
               alt="Abhay Ramesh"
               style={{
-                width: 96,
-                height: 96,
-                borderRadius: 48,
+                width: 300,
+                height: 300,
+                borderRadius: 75,
                 border: "4px solid rgba(255, 255, 255, 0.9)",
                 boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
               }}
             />
           </div>
-
-          {/* Title */}
-          <div
-            style={{
-              fontSize: 84,
-              color: "#ffffff",
-              lineHeight: 1,
-              fontWeight: 900,
-              letterSpacing: "-0.02em",
-              maxWidth: "85%",
-              textShadow: "0 4px 20px rgba(0,0,0,0.7)",
-
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            Abhay Ramesh
-          </div>
-
-          {/* Subtitle */}
-          <div
-            style={{
-              fontSize: 36,
-              color: "rgba(255, 255, 255, 0.9)",
-              lineHeight: 1.4,
-              maxWidth: "70%",
-              fontWeight: 500,
-              textShadow: "0 2px 12px rgba(0,0,0,0.5)",
-            }}
-          >
-            Full Stack Developer building modern web applications with
-            cutting-edge technologies
-          </div>
-        </div>
-
-        {/* Tech Stack */}
-        <div
-          style={{
-            display: "flex",
-            gap: 16,
-            zIndex: 1,
-          }}
-        >
-          {["TypeScript", "React", "Next.js", "Python", "FastAPI"].map(
-            (tech) => (
-              <div
-                key={tech}
-                style={{
-                  background: "rgba(255, 255, 255, 0.15)",
-                  color: "#ffffff",
-                  padding: "12px 24px",
-                  borderRadius: 12,
-                  fontSize: 18,
-                  fontWeight: 600,
-                  letterSpacing: "-0.01em",
-                  border: "1.5px solid rgba(255, 255, 255, 0.3)",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-                }}
-              >
-                {tech}
-              </div>
-            )
-          )}
         </div>
       </div>
     ),

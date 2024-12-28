@@ -1051,9 +1051,18 @@ const ScrambleText = ({ text }: { text: string }) => {
         transition={{ duration: 0.5, ease: "easeInOut" }}
         className="w-1 h-12 bg-white origin-left md:w-2 md:h-16"
       />
-      <h2 className="pl-4 text-4xl font-bold tracking-tighter md:text-7xl font-clash">
-        {displayText}
-      </h2>
+      <div className="relative">
+        <h2 className="pl-4 text-4xl font-bold tracking-tighter md:text-7xl font-clash">
+          {displayText}
+        </h2>
+        <motion.div
+          className="absolute bottom-0 left-4 right-0 h-[2px] bg-gradient-to-r from-white/80 to-transparent"
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+        />
+      </div>
     </motion.div>
   );
 };
@@ -1150,163 +1159,172 @@ const BlogCard = ({ post }: { post: Post }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      viewport={{ once: true }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      className="relative h-full group"
-    >
+    <Link href={`/blog/${post.slug}`} className="block h-full">
       <motion.div
-        className="absolute inset-0 rounded-lg opacity-20"
-        animate={{
-          opacity: isHovered ? 0.3 : 0.1,
-        }}
-        style={{
-          background:
-            "linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
-        }}
-      />
-
-      {/* Animated border container */}
-      <motion.div
-        className="overflow-hidden absolute inset-0 rounded-lg"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.2 }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
+        className="relative h-full group"
       >
-        {/* Border animations */}
         <motion.div
-          className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white to-transparent"
-          initial={{ x: "-100%" }}
-          animate={
-            isHovered
-              ? {
-                  x: ["100%", "-100%"],
-                }
-              : { x: "-100%" }
-          }
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "linear",
+          className="absolute inset-0 rounded-lg opacity-20"
+          animate={{
+            opacity: isHovered ? 0.3 : 0.1,
+          }}
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
           }}
         />
+
+        {/* Animated border container */}
         <motion.div
-          className="absolute top-0 right-0 w-[1px] h-full bg-gradient-to-b from-transparent via-white to-transparent"
-          initial={{ y: "-100%" }}
-          animate={
-            isHovered
-              ? {
-                  y: ["100%", "-100%"],
-                }
-              : { y: "-100%" }
-          }
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "linear",
-            delay: 0.5,
-          }}
-        />
+          className="overflow-hidden absolute inset-0 rounded-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          {/* Border animations */}
+          <motion.div
+            className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white to-transparent"
+            initial={{ x: "-100%" }}
+            animate={
+              isHovered
+                ? {
+                    x: ["100%", "-100%"],
+                  }
+                : { x: "-100%" }
+            }
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
+          <motion.div
+            className="absolute top-0 right-0 w-[1px] h-full bg-gradient-to-b from-transparent via-white to-transparent"
+            initial={{ y: "-100%" }}
+            animate={
+              isHovered
+                ? {
+                    y: ["100%", "-100%"],
+                  }
+                : { y: "-100%" }
+            }
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear",
+              delay: 0.5,
+            }}
+          />
+          <motion.div
+            className="absolute bottom-0 right-0 w-full h-[1px] bg-gradient-to-l from-transparent via-white to-transparent"
+            initial={{ x: "100%" }}
+            animate={
+              isHovered
+                ? {
+                    x: ["-100%", "100%"],
+                  }
+                : { x: "100%" }
+            }
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear",
+              delay: 1,
+            }}
+          />
+          <motion.div
+            className="absolute top-0 left-0 w-[1px] h-full bg-gradient-to-t from-transparent via-white to-transparent"
+            initial={{ y: "100%" }}
+            animate={
+              isHovered
+                ? {
+                    y: ["-100%", "100%"],
+                  }
+                : { y: "100%" }
+            }
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear",
+              delay: 1.5,
+            }}
+          />
+        </motion.div>
+
+        {/* Static border */}
         <motion.div
-          className="absolute bottom-0 right-0 w-full h-[1px] bg-gradient-to-l from-transparent via-white to-transparent"
-          initial={{ x: "100%" }}
-          animate={
-            isHovered
-              ? {
-                  x: ["-100%", "100%"],
-                }
-              : { x: "100%" }
-          }
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "linear",
-            delay: 1,
+          className="absolute inset-0 rounded-lg border border-white/10"
+          animate={{
+            borderColor: isHovered
+              ? "rgba(255,255,255,0.2)"
+              : "rgba(255,255,255,0.1)",
           }}
+          transition={{ duration: 0.3 }}
         />
-        <motion.div
-          className="absolute top-0 left-0 w-[1px] h-full bg-gradient-to-t from-transparent via-white to-transparent"
-          initial={{ y: "100%" }}
-          animate={
-            isHovered
-              ? {
-                  y: ["-100%", "100%"],
-                }
-              : { y: "100%" }
-          }
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "linear",
-            delay: 1.5,
-          }}
-        />
-      </motion.div>
 
-      {/* Static border */}
-      <motion.div
-        className="absolute inset-0 rounded-lg border border-white/10"
-        animate={{
-          borderColor: isHovered
-            ? "rgba(255,255,255,0.2)"
-            : "rgba(255,255,255,0.1)",
-        }}
-        transition={{ duration: 0.3 }}
-      />
+        <div className="flex relative flex-col p-4 h-full md:p-6">
+          <div className="flex flex-wrap gap-2 mb-4">
+            {post.tags.map((tag: string) => (
+              <span
+                key={tag}
+                className="px-2 py-1 text-xs whitespace-nowrap rounded md:text-sm bg-white/10"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
 
-      <div className="flex relative flex-col p-4 h-full md:p-6">
-        <div className="flex flex-wrap gap-2 mb-4">
-          {post.tags.map((tag: string) => (
-            <span
-              key={tag}
-              className="px-2 py-1 text-xs whitespace-nowrap rounded md:text-sm bg-white/10"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
+          <div className="flex flex-col flex-grow">
+            <h3 className="mb-3 text-xl font-bold transition-colors md:text-2xl font-clash md:mb-4 group-hover:text-white text-white/90">
+              {post.title}
+            </h3>
 
-        <div className="flex flex-col flex-grow">
-          <h3 className="mb-3 text-xl font-bold md:text-2xl font-clash md:mb-4">
-            {post.title}
-          </h3>
+            <p className="flex-grow mb-4 text-sm md:text-base text-white/60 line-clamp-2 md:mb-6">
+              {post.excerpt}
+            </p>
 
-          <p className="flex-grow mb-4 text-sm md:text-base text-white/60 line-clamp-2 md:mb-6">
-            {post.excerpt}
-          </p>
+            <div className="flex flex-col gap-4">
+              <div className="flex justify-between items-center text-xs md:text-sm text-white/40">
+                <span>
+                  {new Date(post.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </span>
+                <span>{post.readTime} read</span>
+              </div>
 
-          <div className="flex justify-between items-center mt-auto text-xs md:text-sm text-white/40">
-            <span>
-              {new Date(post.date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </span>
-            <span>{post.readTime} read</span>
+              <motion.div
+                className="flex gap-2 items-center text-sm font-medium transition-colors text-white/60 group-hover:text-white"
+                animate={{ x: isHovered ? 4 : 0 }}
+              >
+                <span>Read Now</span>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </motion.div>
+            </div>
           </div>
         </div>
-
-        <motion.div
-          className="flex absolute inset-0 justify-center items-center rounded-lg opacity-0 bg-black/80"
-          animate={{ opacity: isHovered ? 1 : 0 }}
-        >
-          <Link href={`/blog/${post.slug}`}>
-            <motion.button
-              className="px-6 py-3 text-sm font-medium text-black bg-white rounded-lg"
-              initial={{ scale: 0.9 }}
-              animate={{ scale: isHovered ? 1 : 0.9 }}
-            >
-              Read More
-            </motion.button>
-          </Link>
-        </motion.div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </Link>
   );
 };
 
@@ -1492,12 +1510,20 @@ export default function PortfolioV3() {
             {/* Name */}
             <div className="overflow-hidden mb-4 md:mb-6">
               <motion.h1
-                className="text-4xl font-bold tracking-tighter text-center md:text-8xl font-clash"
+                className="relative text-4xl font-bold tracking-tighter text-center md:text-8xl font-clash"
                 initial={{ y: 100 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
               >
-                ABHAY RAMESH
+                <span className="relative">
+                  ABHAY RAMESH
+                  <motion.div
+                    className="absolute -bottom-1 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: 0.8, duration: 0.8 }}
+                  />
+                </span>
               </motion.h1>
             </div>
 

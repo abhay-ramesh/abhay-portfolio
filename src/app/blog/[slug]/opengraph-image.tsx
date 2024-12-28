@@ -1,7 +1,11 @@
 import { allPosts } from "contentlayer/generated";
 import { ImageResponse } from "next/og";
 
-export const alt = "Blog Post";
+export const alt = ({ params }: { params: { slug: string } }) => {
+  const post = allPosts.find((post) => post.slug === params.slug);
+  return post?.title || "Blog Post";
+};
+
 export const imageOptions = {
   width: 1200,
   height: 630,

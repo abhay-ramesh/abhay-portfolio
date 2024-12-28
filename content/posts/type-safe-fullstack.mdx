@@ -1,11 +1,11 @@
 ---
 title: Achieving Full-Stack Type Safety with FastAPI, Next.js, and OpenAPI Spec
 excerpt: Learn how to build a type-safe full-stack application using FastAPI for the backend, Next.js for the frontend, and hey API for SDK generation in a Turborepo monorepo setup.
-date: 2023-12-23
+date: 2024-12-28
 tags: [TypeScript, Python, FastAPI, Next.js, Type Safety, SDK, Turborepo]
 ---
 
-Imagine catching API integration errors before they hit production, having perfect autocompletion for your backend endpoints, and never having to manually update API types again. This isn't just a dream - it's possible with end-to-end type safety. In this post, I'll show you how I built a fully type-safe system that bridges Python and TypeScript, making full-stack development a breeze.
+Imagine catching API integration errors before they hit production, having perfect autocompletion for your backend endpoints, and never having to manually update API types again. This isn't just a dream - it's possible with end-to-end type safety. In this post, I'll show you how I built a fully type-safe system that bridges [Python](https://www.python.org/) and [TypeScript](https://www.typescriptlang.org/), making full-stack development a breeze.
 
 ## Why This Matters: Real-World Impact
 
@@ -15,7 +15,7 @@ Before we dive into the implementation, let's look at how this setup transforms 
 
 ```typescript
 // Without type safety - Problems only appear at runtime 😱
-const response = await api.get("/user/123");
+const response = await fetch("/user/123");
 console.log(response.data.emailAddress); // Runtime error: undefined
 
 // With our type-safe SDK ✨
@@ -86,15 +86,30 @@ We'll use:
 - Tools: `Turborepo`, `hey-api`, and `pnpm`
 ```
 
+Here are the key technologies we'll be using:
+
+- [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
+- [Next.js](https://nextjs.org/) - React framework for production
+- [hey API](https://heyapi.dev/) - SDK generator from OpenAPI specs
+- [Turborepo](https://turbo.build/) - High-performance build system
+- [pnpm](https://pnpm.io/) - Fast, disk space efficient package manager
+- [React](https://react.dev/) - UI library
+- [Expo](https://expo.dev/) - React Native platform
+- [OpenAPI](https://www.openapis.org/) - API specification standard
+- [Pydantic](https://docs.pydantic.dev/) - Data validation using Python type annotations
+- [Axios](https://axios-http.com/) - Promise based HTTP client
+- [TanStack Query](https://tanstack.com/query/latest) - Powerful data synchronization for React
+
 ## Setting Up the Project Structure
 
 You have two options for organizing your codebase:
 
-### Option 1: Monorepo Structure
+### Option 1: Monorepo Structure (Recommended)
 
 ```bash
 apps/
   ├── web/          # Next.js frontend
+  ├── mobile/       # React Native Expo frontend
   └── api/          # FastAPI backend (optional)
 packages/
   └── sdk/          # Generated TypeScript SDK
@@ -105,7 +120,8 @@ packages/
 ```bash
 # Frontend Monorepo
 apps/
-  └── web/          # Next.js frontend
+  ├── web/          # Next.js frontend
+  └── mobile/       # React Native Expo frontend
 packages/
   └── sdk/          # Generated TypeScript SDK
 
@@ -128,7 +144,7 @@ The SDK generation process remains the same regardless of where your FastAPI bac
 
 ## Backend: FastAPI with Type Definitions
 
-In our FastAPI application, we define our models using Pydantic:
+In our FastAPI application, we define our models using [Pydantic](https://docs.pydantic.dev/):
 
 ```python
 from fastapi import FastAPI
@@ -142,7 +158,7 @@ class User(BaseModel):
 
 app = FastAPI()
 
-@app.get("/users/{user_id}", response_model=User)
+@app.get("/users/{user_id}", response_model=User, operation_id="getUser")
 async def get_user(user_id: int) -> User:
     # Database logic here
     return User(
@@ -176,7 +192,7 @@ FastAPI automatically generates an OpenAPI specification from our code:
 
 ## Generating the SDK with hey API
 
-hey API makes it easy to generate a type-safe SDK from our OpenAPI spec. Here's our configuration:
+[hey API](https://heyapi.dev/) makes it easy to generate a type-safe SDK from our OpenAPI spec. Here's our configuration:
 
 ```typescript
 // openapi-ts.config.ts
@@ -221,7 +237,7 @@ We also need to set up our SDK package configuration:
 
 ## SDK Initialization and Configuration
 
-Before we can use the SDK, we need to add it as a dependency in our client application's `package.json`:
+Before we can use the SDK, we need to add it as a dependency in our client application's `package.json`. We'll use [pnpm](https://pnpm.io/) for package management:
 
 ```json
 {
@@ -288,7 +304,7 @@ This setup provides:
 
 ## Using the Generated SDK in Next.js
 
-Now we can use our type-safe SDK in our Next.js application. The method names in the SDK are automatically derived from the operation IDs defined in our FastAPI backend:
+Now we can use our type-safe SDK in our [Next.js](https://nextjs.org/) application. The method names in the SDK are automatically derived from the operation IDs defined in our FastAPI backend:
 
 ```typescript
 import { sdk } from "@/lib/sdk";
@@ -348,7 +364,7 @@ This naming convention ensures consistent and predictable API method names acros
 
 ## Automating SDK Generation
 
-We can automate SDK generation in our Turborepo pipeline:
+We can automate SDK generation in our [Turborepo](https://turbo.build/) pipeline:
 
 ```json
 {
@@ -379,12 +395,12 @@ We can automate SDK generation in our Turborepo pipeline:
 
 1. **Version Mismatches**
 
-   - Use workspace dependencies in package.json
+   - Use [workspace dependencies](https://pnpm.io/workspaces) in package.json
    - Implement version checking in CI/CD
 
 2. **Development Workflow**
 
-   - Run backend in watch mode
+   - Run backend in watch mode using [uvicorn](https://www.uvicorn.org/)
    - Automate SDK generation on schema changes
 
 3. **Error Handling**
@@ -424,4 +440,4 @@ The combination of FastAPI's automatic OpenAPI generation, hey API's SDK generat
 
 Ready to transform your development workflow? Check out the complete code on my [GitHub](https://github.com/abhay-ramesh) and start building with confidence!
 
-Have questions or want to share your experience? Feel free to reach out - I'd love to hear how you're using these tools in your projects.
+Have questions or want to share your experience? Feel free to reach out on [Twitter](https://twitter.com/abhay__ramesh) or [LinkedIn](https://www.linkedin.com/in/abhay-ramesh/) - I'd love to hear how you're using these tools in your projects.
