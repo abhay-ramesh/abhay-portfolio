@@ -120,18 +120,32 @@ const textReveal = {
 
 const experiences = [
   {
-    role: "Full Stack Developer",
-    company: "Freelance",
-    period: "2022 - Present",
+    role: "Founder & CEO",
+    company: "Hunchbite Technologies",
+    period: "Present",
     description:
-      "Building modern web applications with Next.js, React, and TypeScript. Specializing in creating performant and scalable solutions.",
+      "Web design and CRO agency helping companies grow through optimized websites and conversion strategies.",
   },
   {
-    role: "Web Developer",
-    company: "Open Source",
-    period: "2021 - Present",
+    role: "Senior Frontend Engineer",
+    company: "Kshana AI",
+    period: "Apr 2024 - Present",
     description:
-      "Contributing to various open-source projects, focusing on web development tools and libraries.",
+      "Working with Next.js and React.js to build modern web applications. Focusing on creating performant and responsive user interfaces.",
+  },
+  {
+    role: "Frontend Web Developer (Intern)",
+    company: "Kshana AI",
+    period: "Feb 2024 - Apr 2024",
+    description:
+      "Developed web applications using React.js and Next.js. Gained hands-on experience in modern frontend development practices.",
+  },
+  {
+    role: "Full Stack Web Developer (Intern)",
+    company: "Instadukan",
+    period: "Jun 2022 - Sep 2022",
+    description:
+      "Worked on full-stack web development projects in Bengaluru, Karnataka. Contributed to both frontend and backend development.",
   },
 ];
 
