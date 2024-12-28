@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { clash, inter, satoshi } from "./fonts";
 import "./globals.css";
 import { GoogleAnalytics } from "./GoogleAnalytics";
+import { PostHogProvider } from "./providers";
 import { JsonLd, metadataVal } from "./seo_data";
 
 export const metadata = metadataVal;
@@ -33,7 +34,7 @@ export default function RootLayout({
         <JsonLd />
         <GoogleAnalytics />
         <main className="flex flex-col pb-4 w-full h-full grow sm:pt-4">
-          {children}
+          <PostHogProvider>{children}</PostHogProvider>
         </main>
       </body>
     </html>
