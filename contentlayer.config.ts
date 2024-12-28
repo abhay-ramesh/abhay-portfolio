@@ -2,6 +2,7 @@ import { defineDocumentType, makeSource } from "contentlayer/source-files";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
+import { rehypeNpmCommand } from "./src/lib/rehype-npm-command";
 
 export const Post = defineDocumentType(() => ({
   name: "Post",
@@ -53,6 +54,7 @@ export default makeSource({
   mdx: {
     rehypePlugins: [
       rehypeSlug,
+      rehypeNpmCommand,
       [
         rehypePrettyCode as any,
         {

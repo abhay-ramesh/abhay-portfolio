@@ -1,0 +1,69 @@
+---
+title: Quick Tip - Kill Stuck Next.js Development Server
+excerpt: Learn how to quickly kill a stuck Next.js development server on port 3000 with a simple command.
+date: 2024-01-02
+author: Abhay Ramesh
+readTime: 2 min
+tags: [Next.js, Development, Terminal, Tips]
+---
+
+> **TL;DR - Quick Fix**  
+> Just run this in your terminal:
+>
+> ```bash
+> lsof -t -i tcp:3000 | xargs kill
+> ```
+
+Ever encountered the dreaded `Error: listen EADDRINUSE: address already in use :::3000` when trying to start your Next.js development server? Here's a quick solution to add to your `package.json` scripts.
+
+## The Problem
+
+When developing with Next.js, sometimes the development server doesn't shut down properly, leaving port 3000 occupied. This commonly happens when:
+
+- Your terminal crashes unexpectedly
+- You force-quit the development process
+- A previous session is still running in the background
+
+## The Solution
+
+Add this script to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "kill": "lsof -t -i tcp:3000 | xargs kill"
+  }
+}
+```
+
+Now you can simply run:
+
+```bash
+npm run kill
+# or
+yarn kill
+# or
+pnpm kill
+```
+
+## How It Works
+
+Let's break down the command:
+
+1. `lsof -t -i tcp:3000`: Lists process IDs using port 3000
+2. `xargs kill`: Takes those IDs and kills the processes
+
+## When You Need This
+
+This command is particularly helpful when:
+
+- Switching between multiple Next.js projects
+- After system sleep/wake cycles
+- When your development environment crashes
+- Hot reloading stops working
+
+Add it to your development toolkit, and you'll never have to manually hunt down and kill those pesky port processes again!
+
+---
+
+_Note: This command works on Unix-based systems (macOS, Linux). For Windows, you'll need a different approach using `netstat` and `taskkill`._

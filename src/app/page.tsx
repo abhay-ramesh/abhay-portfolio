@@ -1447,7 +1447,6 @@ export default function PortfolioV3() {
         className="relative min-h-screen text-white bg-[#0A0A0A] font-satoshi"
       >
         <GeometricPattern />
-        {/* <ParallaxBackground /> */}
         <Navigation />
 
         {/* Progress Bar */}
@@ -1457,7 +1456,7 @@ export default function PortfolioV3() {
         />
 
         <div className="relative">
-          {/* Hero Section */}
+          {/* Hero Section - Full width for impact */}
           <section
             id="home"
             className="flex overflow-hidden relative flex-col justify-center items-center px-4 min-h-screen border-b md:px-16 border-white/10"
@@ -1556,326 +1555,331 @@ export default function PortfolioV3() {
             </motion.div>
           </section>
 
-          {/* About Section */}
-          <section
-            id="about"
-            className="flex justify-center items-center px-4 py-16 min-h-screen border-b md:px-16 md:py-32 border-white/10"
-          >
-            <div className="max-w-4xl">
-              <ScrambleText text="ABOUT" />
-              <motion.div
-                variants={staggerContainer}
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true }}
-                className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-24"
-              >
-                <div className="space-y-6 md:space-y-8">
-                  <motion.p
-                    variants={fadeInUp}
-                    className="text-lg leading-relaxed md:text-xl text-white/80"
-                  >
-                    I craft digital experiences with clean code and bold design.
-                    Specializing in modern web technologies, I build scalable
-                    applications that make an impact.
-                  </motion.p>
-                  <motion.p
-                    variants={fadeInUp}
-                    className="text-lg leading-relaxed md:text-xl text-white/80"
-                  >
-                    My approach combines technical excellence with minimalistic
-                    design principles.
-                  </motion.p>
-                </div>
-                <div>
-                  <motion.div
-                    variants={fadeInUp}
-                    className="space-y-8 md:space-y-12"
-                  >
-                    <div>
-                      <h3 className="mb-6 text-xl font-bold tracking-wide md:mb-8 md:text-2xl font-clash">
-                        SKILLS
-                      </h3>
-                      <motion.div
-                        className="grid grid-cols-1 gap-4 md:gap-6"
-                        variants={staggerContainer}
-                        initial="initial"
-                        whileInView="animate"
-                        viewport={{ once: true }}
-                      >
-                        {skills.map((skill, index) => (
-                          <SkillBar
-                            key={skill.name}
-                            skill={skill}
-                            index={index}
-                          />
-                        ))}
-                      </motion.div>
-                    </div>
-                  </motion.div>
-                </div>
-              </motion.div>
-            </div>
-          </section>
-
-          {/* Experience Section */}
-          <section
-            id="experience"
-            className="px-4 py-16 min-h-screen border-b md:px-16 md:py-32 border-white/10"
-          >
-            <ScrambleText text="EXPERIENCE" />
-            <div className="space-y-12 md:space-y-16">
-              {experiences.map((exp, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="group"
-                >
-                  <div className="flex flex-col justify-between items-start mb-4 md:flex-row md:items-baseline">
-                    <h3 className="mb-2 text-2xl font-bold md:text-3xl font-clash md:mb-0">
-                      {exp.role}
-                    </h3>
-                    <span className="text-white/60">{exp.period}</span>
-                  </div>
-                  <p className="text-lg md:text-xl text-white/80">
-                    {exp.company}
-                  </p>
-                  <p className="mt-4 text-sm md:text-base text-white/60">
-                    {exp.description}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-          </section>
-
-          {/* Projects Section */}
-          <section
-            id="projects"
-            className="px-4 py-16 min-h-screen border-b md:px-16 md:py-32 border-white/10"
-          >
-            <ScrambleText text="PROJECTS" />
-
-            {/* GitHub Contributions Heatmap */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="overflow-x-auto mx-auto mb-12 w-full md:mb-16"
+          {/* Content Container for better readability */}
+          <div className="mx-auto max-w-6xl">
+            {/* About Section */}
+            <section
+              id="about"
+              className="flex justify-center items-center px-4 py-16 min-h-screen border-b md:px-8 md:py-32 border-white/10"
             >
-              <div className="flex flex-col justify-between items-start mb-6 md:flex-row md:items-baseline md:mb-8">
-                <h3 className="mb-2 text-xl font-bold md:text-2xl font-clash md:mb-0">
-                  GITHUB ACTIVITY
-                </h3>
-                {contributions.length > 0 && (
-                  <span className="text-sm md:text-base text-white/60">
-                    {contributions.reduce((acc, curr) => acc + curr.count, 0)}{" "}
-                    contributions in the last year
-                  </span>
-                )}
-              </div>
-
-              <div className="min-w-[750px] md:min-w-0">
-                <div className="flex">
-                  {/* Days of week labels */}
-                  <div
-                    className="flex flex-col text-right justify-between mr-2 text-[10px] text-white/40"
-                    style={{
-                      paddingTop: "1px",
-                      paddingBottom: "1px",
-                    }}
-                  >
-                    <span>Sun</span>
-                    <span>Mon</span>
-                    <span>Tue</span>
-                    <span>Wed</span>
-                    <span>Thu</span>
-                    <span>Fri</span>
-                    <span>Sat</span>
+              <div className="max-w-4xl">
+                <ScrambleText text="ABOUT" />
+                <motion.div
+                  variants={staggerContainer}
+                  initial="initial"
+                  whileInView="animate"
+                  viewport={{ once: true }}
+                  className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-24"
+                >
+                  <div className="space-y-6 md:space-y-8">
+                    <motion.p
+                      variants={fadeInUp}
+                      className="text-lg leading-relaxed md:text-xl text-white/80"
+                    >
+                      I craft digital experiences with clean code and bold
+                      design. Specializing in modern web technologies, I build
+                      scalable applications that make an impact.
+                    </motion.p>
+                    <motion.p
+                      variants={fadeInUp}
+                      className="text-lg leading-relaxed md:text-xl text-white/80"
+                    >
+                      My approach combines technical excellence with
+                      minimalistic design principles.
+                    </motion.p>
                   </div>
+                  <div>
+                    <motion.div
+                      variants={fadeInUp}
+                      className="space-y-8 md:space-y-12"
+                    >
+                      <div>
+                        <h3 className="mb-6 text-xl font-bold tracking-wide md:mb-8 md:text-2xl font-clash">
+                          SKILLS
+                        </h3>
+                        <motion.div
+                          className="grid grid-cols-1 gap-4 md:gap-6"
+                          variants={staggerContainer}
+                          initial="initial"
+                          whileInView="animate"
+                          viewport={{ once: true }}
+                        >
+                          {skills.map((skill, index) => (
+                            <SkillBar
+                              key={skill.name}
+                              skill={skill}
+                              index={index}
+                            />
+                          ))}
+                        </motion.div>
+                      </div>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </div>
+            </section>
 
-                  {/* Contribution grid */}
-                  <div className="flex-1">
+            {/* Experience Section */}
+            <section
+              id="experience"
+              className="px-4 py-16 min-h-screen border-b md:px-8 md:py-32 border-white/10"
+            >
+              <ScrambleText text="EXPERIENCE" />
+              <div className="space-y-12 md:space-y-16">
+                {experiences.map((exp, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="group"
+                  >
+                    <div className="flex flex-col justify-between items-start mb-4 md:flex-row md:items-baseline">
+                      <h3 className="mb-2 text-2xl font-bold md:text-3xl font-clash md:mb-0">
+                        {exp.role}
+                      </h3>
+                      <span className="text-white/60">{exp.period}</span>
+                    </div>
+                    <p className="text-lg md:text-xl text-white/80">
+                      {exp.company}
+                    </p>
+                    <p className="mt-4 text-sm md:text-base text-white/60">
+                      {exp.description}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+
+            {/* Projects Section */}
+            <section
+              id="projects"
+              className="px-4 py-16 min-h-screen border-b md:px-8 md:py-32 border-white/10"
+            >
+              <ScrambleText text="PROJECTS" />
+
+              {/* GitHub Contributions Heatmap */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="overflow-x-auto mx-auto mb-12 w-full md:mb-16"
+              >
+                <div className="flex flex-col justify-between items-start mb-6 md:flex-row md:items-baseline md:mb-8">
+                  <h3 className="mb-2 text-xl font-bold md:text-2xl font-clash md:mb-0">
+                    GITHUB ACTIVITY
+                  </h3>
+                  {contributions.length > 0 && (
+                    <span className="text-sm md:text-base text-white/60">
+                      {contributions.reduce((acc, curr) => acc + curr.count, 0)}{" "}
+                      contributions in the last year
+                    </span>
+                  )}
+                </div>
+
+                <div className="min-w-[750px] md:min-w-0">
+                  <div className="flex">
+                    {/* Days of week labels */}
                     <div
-                      className="grid grid-rows-7 auto-rows-[17px] gap-[3px]"
+                      className="flex flex-col text-right justify-between mr-2 text-[10px] text-white/40"
                       style={{
-                        gridTemplateColumns: `repeat(${Math.ceil(
-                          contributions.length / 7
-                        )}, 17px)`,
+                        paddingTop: "1px",
+                        paddingBottom: "1px",
                       }}
                     >
-                      {Array.from({
-                        length: Math.ceil(contributions.length / 7),
-                      }).map((_, colIndex) =>
-                        Array.from({ length: 7 }).map((_, rowIndex) => {
-                          const contributionIndex = colIndex * 7 + rowIndex;
-                          const contribution = contributions[
-                            contributionIndex
-                          ] || {
-                            count: 0,
-                            level: 0,
-                            date: new Date().toISOString(),
-                          };
+                      <span>Sun</span>
+                      <span>Mon</span>
+                      <span>Tue</span>
+                      <span>Wed</span>
+                      <span>Thu</span>
+                      <span>Fri</span>
+                      <span>Sat</span>
+                    </div>
 
-                          // Skip future dates
-                          const contributionDate = new Date(contribution.date);
-                          const today = new Date();
-                          if (contributionDate > today) {
-                            return null;
-                          }
+                    {/* Contribution grid */}
+                    <div className="flex-1">
+                      <div
+                        className="grid grid-rows-7 auto-rows-[17px] gap-[3px]"
+                        style={{
+                          gridTemplateColumns: `repeat(${Math.ceil(
+                            contributions.length / 7
+                          )}, 17px)`,
+                        }}
+                      >
+                        {Array.from({
+                          length: Math.ceil(contributions.length / 7),
+                        }).map((_, colIndex) =>
+                          Array.from({ length: 7 }).map((_, rowIndex) => {
+                            const contributionIndex = colIndex * 7 + rowIndex;
+                            const contribution = contributions[
+                              contributionIndex
+                            ] || {
+                              count: 0,
+                              level: 0,
+                              date: new Date().toISOString(),
+                            };
 
-                          const isToday =
-                            contributionDate.toDateString() ===
-                              today.toDateString() &&
-                            contributionIndex < contributions.length;
+                            // Skip future dates
+                            const contributionDate = new Date(
+                              contribution.date
+                            );
+                            const today = new Date();
+                            if (contributionDate > today) {
+                              return null;
+                            }
 
-                          return (
-                            <div
-                              key={`${colIndex}-${rowIndex}`}
-                              className="relative group"
-                              style={{
-                                gridColumn: colIndex + 1,
-                                gridRow: rowIndex + 1,
-                              }}
-                            >
+                            const isToday =
+                              contributionDate.toDateString() ===
+                                today.toDateString() &&
+                              contributionIndex < contributions.length;
+
+                            return (
                               <div
-                                className={`w-[15px] h-[15px] rounded-sm ${getContributionColor(
-                                  contribution.level
-                                )} ${
-                                  isToday
-                                    ? "ring-2 ring-white ring-offset-1 ring-offset-[#0A0A0A]"
-                                    : ""
-                                }`}
-                                title={`${
-                                  contribution.count
-                                } contributions on ${contributionDate.toLocaleDateString()}`}
-                              />
-                              <div className="absolute bottom-full left-1/2 z-10 px-2 py-1 mb-2 text-xs whitespace-nowrap rounded opacity-0 transition-opacity -translate-x-1/2 bg-white/10 group-hover:opacity-100">
-                                {contribution.count} contributions on{" "}
-                                {contributionDate.toLocaleDateString()}
+                                key={`${colIndex}-${rowIndex}`}
+                                className="relative group"
+                                style={{
+                                  gridColumn: colIndex + 1,
+                                  gridRow: rowIndex + 1,
+                                }}
+                              >
+                                <div
+                                  className={`w-[15px] h-[15px] rounded-sm ${getContributionColor(
+                                    contribution.level
+                                  )} ${
+                                    isToday
+                                      ? "ring-2 ring-white ring-offset-1 ring-offset-[#0A0A0A]"
+                                      : ""
+                                  }`}
+                                  title={`${
+                                    contribution.count
+                                  } contributions on ${contributionDate.toLocaleDateString()}`}
+                                />
+                                <div className="absolute bottom-full left-1/2 z-10 px-2 py-1 mb-2 text-xs whitespace-nowrap rounded opacity-0 transition-opacity -translate-x-1/2 bg-white/10 group-hover:opacity-100">
+                                  {contribution.count} contributions on{" "}
+                                  {contributionDate.toLocaleDateString()}
+                                </div>
                               </div>
-                            </div>
-                          );
-                        })
-                      )}
+                            );
+                          })
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Legend */}
-                <div className="flex gap-2 items-center mt-4 text-sm text-white/60">
-                  <span>Less</span>
-                  {[0, 1, 2, 3, 4].map((level) => (
-                    <div
-                      key={level}
-                      className={`w-3 h-3 rounded-sm ${getContributionColor(
-                        level
-                      )}`}
-                    />
-                  ))}
-                  <span>More</span>
+                  {/* Legend */}
+                  <div className="flex gap-2 items-center mt-4 text-sm text-white/60">
+                    <span>Less</span>
+                    {[0, 1, 2, 3, 4].map((level) => (
+                      <div
+                        key={level}
+                        className={`w-3 h-3 rounded-sm ${getContributionColor(
+                          level
+                        )}`}
+                      />
+                    ))}
+                    <span>More</span>
+                  </div>
                 </div>
+              </motion.div>
+
+              {/* GitHub Repositories */}
+              <div className="grid grid-cols-1 gap-6 md:gap-8 md:grid-cols-2">
+                {pinnedRepos.map((repo) => (
+                  <ProjectCard key={repo.name} repo={repo} />
+                ))}
               </div>
-            </motion.div>
+            </section>
 
-            {/* GitHub Repositories */}
-            <div className="grid grid-cols-1 gap-6 md:gap-8 md:grid-cols-2">
-              {pinnedRepos.map((repo) => (
-                <ProjectCard key={repo.name} repo={repo} />
-              ))}
-            </div>
-          </section>
-
-          {/* Blog Section */}
-          <section
-            id="blog"
-            className="px-4 py-16 min-h-screen border-b md:px-16 md:py-32 border-white/10"
-          >
-            <ScrambleText text="BLOG" />
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              viewport={{ once: true }}
-              className="mb-8 text-lg md:mb-12 md:text-xl text-white/80"
+            {/* Blog Section */}
+            <section
+              id="blog"
+              className="px-4 py-16 min-h-screen border-b md:px-8 md:py-32 border-white/10"
             >
-              Thoughts, learnings, and insights about web development and
-              design.
-            </motion.p>
-
-            <div className="grid grid-cols-1 gap-6 md:gap-8 md:grid-cols-2">
-              {blogPosts.map((post) => (
-                <BlogCard key={post.slug} post={post} />
-              ))}
-            </div>
-          </section>
-
-          {/* Contact Section */}
-          <section
-            id="contact"
-            className="flex justify-center items-center px-4 py-16 min-h-screen md:px-16 md:py-32"
-          >
-            <div className="w-full max-w-4xl text-center">
-              <ScrambleText text="LETS CONNECT" />
+              <ScrambleText text="BLOG" />
               <motion.p
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
                 viewport={{ once: true }}
-                className="mb-8 text-lg md:mb-12 md:text-xl text-white/80"
+                className="mb-8 text-lg leading-relaxed md:mb-12 md:text-xl text-white/80"
               >
-                Open to new opportunities and collaborations.
+                Thoughts, learnings, and insights about web development and
+                design.
               </motion.p>
 
-              <form className="mx-auto mt-8 space-y-4 max-w-xl md:mt-12 md:space-y-6">
-                <FormInput label="Name" name="name" required />
-                <FormInput label="Email" type="email" name="email" required />
-                <FormInput
-                  label="Message"
-                  textarea
-                  name="message"
-                  rows={4}
-                  required
-                />
+              <div className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2">
+                {blogPosts.map((post) => (
+                  <BlogCard key={post.slug} post={post} />
+                ))}
+              </div>
+            </section>
 
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="py-3 w-full font-medium text-black bg-white rounded-lg transition-colors md:py-4 hover:bg-white/90"
+            {/* Contact Section */}
+            <section
+              id="contact"
+              className="flex justify-center items-center px-4 py-16 min-h-screen md:px-8 md:py-32"
+            >
+              <div className="w-full max-w-4xl text-center">
+                <ScrambleText text="LETS CONNECT" />
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  viewport={{ once: true }}
+                  className="mb-8 text-lg md:mb-12 md:text-xl text-white/80"
                 >
-                  Send Message
-                </motion.button>
-              </form>
+                  Open to new opportunities and collaborations.
+                </motion.p>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-                viewport={{ once: true }}
-                className="flex flex-col gap-4 justify-center mt-12 md:flex-row md:gap-8 md:mt-16"
-              >
-                <motion.a
-                  whileHover={{ y: -2 }}
-                  href="https://www.linkedin.com/in/abhay-ramesh/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-base md:text-lg tracking-[0.3em] text-white/60 hover:text-white transition-colors font-medium"
+                <form className="mx-auto mt-8 space-y-4 max-w-xl md:mt-12 md:space-y-6">
+                  <FormInput label="Name" name="name" required />
+                  <FormInput label="Email" type="email" name="email" required />
+                  <FormInput
+                    label="Message"
+                    textarea
+                    name="message"
+                    rows={4}
+                    required
+                  />
+
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="py-3 w-full font-medium text-black bg-white rounded-lg transition-colors md:py-4 hover:bg-white/90"
+                  >
+                    Send Message
+                  </motion.button>
+                </form>
+
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                  viewport={{ once: true }}
+                  className="flex flex-col gap-4 justify-center mt-12 md:flex-row md:gap-8 md:mt-16"
                 >
-                  LINKEDIN
-                </motion.a>
-                <motion.a
-                  whileHover={{ y: -2 }}
-                  href="mailto:contact@abhayramesh.com"
-                  className="text-base md:text-lg tracking-[0.3em] text-white/60 hover:text-white transition-colors font-medium"
-                >
-                  EMAIL
-                </motion.a>
-              </motion.div>
-            </div>
-          </section>
+                  <motion.a
+                    whileHover={{ y: -2 }}
+                    href="https://www.linkedin.com/in/abhay-ramesh/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-base md:text-lg tracking-[0.3em] text-white/60 hover:text-white transition-colors font-medium"
+                  >
+                    LINKEDIN
+                  </motion.a>
+                  <motion.a
+                    whileHover={{ y: -2 }}
+                    href="mailto:contact@abhayramesh.com"
+                    className="text-base md:text-lg tracking-[0.3em] text-white/60 hover:text-white transition-colors font-medium"
+                  >
+                    EMAIL
+                  </motion.a>
+                </motion.div>
+              </div>
+            </section>
+          </div>
         </div>
       </motion.div>
     </>

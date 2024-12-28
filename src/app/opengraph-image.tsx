@@ -87,6 +87,9 @@ export default async function Image() {
               flexDirection: "column",
               gap: 40,
               zIndex: 1,
+              justifyContent: "center",
+              alignItems: "flex-start",
+              height: "100%",
             }}
           >
             {/* Title */}

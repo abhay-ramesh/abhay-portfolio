@@ -1,0 +1,215 @@
+---
+title: Clean Up Your Codebase with Knip - Find Dead Code in Seconds
+excerpt: Learn how to automatically detect and remove unused exports, files, and dependencies in your TypeScript/JavaScript projects using Knip.
+date: 2024-01-02
+author: Abhay Ramesh
+readTime: 3 min
+tags: [TypeScript, JavaScript, Development, Code Quality, Dead Code]
+---
+
+> **TL;DR - Find unused code in your project**  
+> Run this in your terminal:
+>
+> ```bash
+> npx knip
+> ```
+
+## The Problem
+
+As codebases grow, it's common to accumulate:
+
+- Unused exports and types
+- Dead files that no one uses anymore
+- Dependencies listed in package.json but never imported
+- Duplicate or obsolete code paths
+
+Manually finding these is time-consuming and error-prone.
+
+## The Solution
+
+[Knip](https://github.com/webpro/knip) is a powerful tool that finds unused:
+
+- Exports (functions, types, components)
+- Files
+- Dependencies
+- Package.json entries
+
+Add it to your project:
+
+```bash
+npm install -D knip
+# or
+yarn add -D knip
+# or
+pnpm add -D knip
+```
+
+Add to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "knip": "knip"
+  }
+}
+```
+
+## What It Finds
+
+1. **Unused Exports**:
+
+   ```typescript
+   // Only Component1 is used elsewhere
+   export const Component1 = () => <div>Used</div>;
+   export const Component2 = () => <div>Never imported!</div>; // Knip will find this
+   ```
+
+2. **Dead Files**:
+
+   ```typescript
+   // oldUtils.ts - no imports anywhere
+   export const formatDate = (date: Date) => {
+     // This entire file is unused
+   };
+   ```
+
+3. **Unused Dependencies**:
+   ```json
+   {
+     "dependencies": {
+       "used-package": "^1.0.0",
+       "never-imported": "^2.0.0" // Knip will flag this
+     }
+   }
+   ```
+
+## Configuration
+
+Create `knip.json` for custom configuration:
+
+```json
+{
+  "entry": ["src/index.ts", "src/pages/**/*.tsx"],
+  "project": ["src/**/*.{ts,tsx}"],
+  "ignore": ["**/*.test.ts"],
+  "ignoreDependencies": ["typescript"]
+}
+```
+
+## Real-World Example
+
+Let's say you have a React component library:
+
+```typescript
+// components/index.ts
+export * from "./Button";
+export * from "./Input";
+export * from "./Card";
+export * from "./OldComponent"; // No one uses this anymore
+
+// components/OldComponent.tsx
+export const OldComponent = () => {
+  return <div>I'm never used!</div>;
+};
+```
+
+Running `knip` will show:
+
+```bash
+unused-export components/index.ts:4 - export from './OldComponent'
+unused-file components/OldComponent.tsx - file is never imported
+```
+
+## Pro Tips
+
+1. **CI Integration**:
+
+   ```yaml
+   - name: Check Dead Code
+     run: npx knip --strict
+   ```
+
+2. **Git Hooks**:
+
+   ```json
+   {
+     "husky": {
+       "hooks": {
+         "pre-push": "npm run knip"
+       }
+     }
+   }
+   ```
+
+3. **With Reporter**:
+   ```json
+   {
+     "scripts": {
+       "knip:report": "knip --reporter json > deadcode-report.json"
+     }
+   }
+   ```
+
+## Benefits
+
+1. **Smaller Bundle Size**: Remove unused code
+2. **Better Maintainability**: Less code to maintain
+3. **Cleaner Dependencies**: Only keep what you use
+4. **Improved Performance**: Less code to parse and compile
+5. **Better Developer Experience**: Clear understanding of what code is actually used
+
+## Common Use Cases
+
+1. **Before Major Refactoring**:
+
+   ```bash
+   # Check current state
+   npm run knip
+   # Remove flagged code
+   # Run again to verify
+   npm run knip
+   ```
+
+2. **Cleaning Dependencies**:
+
+   ```bash
+   # Find unused packages
+   npx knip --dependencies
+   # Remove them
+   npm remove [unused-package]
+   ```
+
+3. **Continuous Monitoring**:
+   ```json
+   {
+     "scripts": {
+       "knip:watch": "knip --watch"
+     }
+   }
+   ```
+
+## Best Practices
+
+1. **Start Clean**:
+
+   - Run on new projects early
+   - Easier to maintain than clean up later
+
+2. **Regular Checks**:
+
+   - Run before major releases
+   - Part of code review process
+
+3. **Incremental Adoption**:
+   ```json
+   {
+     "scripts": {
+       "knip:strict": "knip --strict",
+       "knip:warn": "knip --reporter warning"
+     }
+   }
+   ```
+
+---
+
+_Note: While Knip is great at finding unused code, always verify its suggestions before deletion. Some code might be used dynamically or through reflection._

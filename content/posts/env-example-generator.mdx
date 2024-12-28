@@ -1,0 +1,138 @@
+---
+title: Automate Your .env.example Generation - A Developer's Time-Saver
+excerpt: Learn how to automatically generate .env.example files from your .env.local without exposing sensitive values.
+date: 2024-01-02
+author: Abhay Ramesh
+readTime: 2 min
+tags: [Development, Tips, Environment Variables, Shell, Git]
+---
+
+> **TL;DR - Quick Fix**  
+> Run this in your terminal:
+>
+> ```bash
+> sed 's/=.*/=/' .env.local > .env.example
+> ```
+
+## The Problem
+
+As developers, we often struggle with maintaining `.env.example` files in our repositories. The common workflow goes like this:
+
+1. Create a `.env.local` with actual values
+2. Manually copy it to `.env.example`
+3. Remove all sensitive values
+4. Forget to update `.env.example` when adding new variables
+5. Repeat this process every time
+
+This manual process is:
+
+- Time-consuming
+- Error-prone
+- Easy to forget
+- Often leads to outdated example files
+
+## The Solution
+
+Add this one-liner to your `package.json` scripts:
+
+```json
+{
+  "scripts": {
+    "env:gen": "sed 's/=.*/=/' .env.local > .env.example"
+  }
+}
+```
+
+Now you can generate your `.env.example` file with a single command:
+
+```bash
+npm run env:gen
+# or
+yarn env:gen
+# or
+pnpm env:gen
+```
+
+## How It Works
+
+Let's break down the command:
+
+1. `sed 's/=.*/=/'`: Uses `sed` to replace everything after `=` with nothing
+2. `.env.local`: Reads from your actual env file
+3. `> .env.example`: Outputs to the example file
+
+For example, this:
+
+```env
+DATABASE_URL=postgresql://user:password@localhost:5432/mydb
+API_KEY=1234567890
+DEBUG=true
+```
+
+Becomes:
+
+```env
+DATABASE_URL=
+API_KEY=
+DEBUG=
+```
+
+## Best Practices
+
+1. **Add to Your Development Workflow**:
+
+   ```bash
+   # After adding new env variables
+   npm run env:gen
+   git add .env.example
+   git commit -m "chore: update env example"
+   ```
+
+2. **Git Hooks**:
+   Consider adding this to your pre-commit hook to never forget updating the example file.
+
+3. **Documentation**:
+   Add comments in your `.env.local` file - they'll be preserved in the example:
+
+   ```env
+   # Database configuration
+   DATABASE_URL=your-value-here
+
+   # API credentials
+   API_KEY=your-key-here
+   ```
+
+## When to Use This
+
+This command is particularly useful when:
+
+- Starting a new project
+- Adding new environment variables
+- Sharing your project with other developers
+- Maintaining open-source projects
+- Ensuring your example stays in sync with actual requirements
+
+## Pro Tips
+
+1. **Custom Variations**:
+
+   ```json
+   {
+     "scripts": {
+       "env:gen": "sed 's/=.*/=/' .env.local > .env.example",
+       "env:gen:dev": "sed 's/=.*/=/' .env.development > .env.development.example",
+       "env:gen:all": "npm run env:gen && npm run env:gen:dev"
+     }
+   }
+   ```
+
+2. **Add Default Values**:
+   ```env
+   NODE_ENV=development
+   DEBUG=false
+   PORT=3000
+   ```
+
+---
+
+_Note: This command works on Unix-based systems (macOS, Linux). For Windows, you might need to use WSL or alternative commands._
