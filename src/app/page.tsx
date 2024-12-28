@@ -1500,7 +1500,7 @@ export default function PortfolioV3() {
                   src="https://github.com/abhay-ramesh.png"
                   alt="Abhay Ramesh"
                   fill
-                  className="object-cover rounded-full grayscale transition-all duration-500 hover:grayscale-0"
+                  className="object-cover rounded-full transition-all duration-500 hover:grayscale-0"
                   priority
                 />
               </div>
