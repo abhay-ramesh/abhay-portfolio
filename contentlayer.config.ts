@@ -2,6 +2,8 @@ import { defineDocumentType, makeSource } from "contentlayer/source-files";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
+import { codeImport } from "remark-code-import";
+import remarkGfm from "remark-gfm";
 import { rehypeNpmCommand } from "./src/lib/rehype-npm-command";
 
 export const Post = defineDocumentType(() => ({
@@ -52,8 +54,10 @@ export default makeSource({
   contentDirPath: "content/posts",
   documentTypes: [Post],
   mdx: {
+    remarkPlugins: [remarkGfm],
     rehypePlugins: [
       rehypeSlug,
+      codeImport,
       rehypeNpmCommand,
       [
         rehypePrettyCode as any,
@@ -76,7 +80,8 @@ export default makeSource({
         rehypeAutolinkHeadings,
         {
           properties: {
-            className: ["anchor"],
+            className: ["subheading-anchor"],
+            ariaLabel: "Link to section",
           },
         },
       ],
