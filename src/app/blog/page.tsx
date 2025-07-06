@@ -1,3 +1,4 @@
+import NewsletterSignup from "@/components/NewsletterSignup";
 import { allPosts } from "contentlayer/generated";
 import Link from "next/link";
 
@@ -65,6 +66,16 @@ export default function BlogPage() {
               </article>
             </Link>
           ))}
+        </div>
+
+        {/* Newsletter Signup - After browsing posts */}
+        <div className="mt-16 pt-8 border-t border-white/10">
+          <NewsletterSignup
+            title="Join my newsletter"
+            description="Don't miss out on new posts and development insights. Get my latest articles delivered directly to your inbox."
+            layout="horizontal"
+            className="max-w-4xl mx-auto"
+          />
         </div>
       </div>
     </div>

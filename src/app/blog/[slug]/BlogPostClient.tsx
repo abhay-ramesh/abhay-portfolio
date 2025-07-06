@@ -1,5 +1,6 @@
 "use client";
 
+import NewsletterSignup from "@/components/NewsletterSignup";
 import { TableOfContents } from "@/components/TableOfContents";
 import { Post, allPosts } from "contentlayer/generated";
 import { motion } from "framer-motion";
@@ -137,6 +138,19 @@ export default function BlogPostClient({ post }: { post: Post }) {
 
             <div className="prose prose-invert prose-pre:!bg-white/5 prose-pre:!border prose-pre:!border-white/10 prose-code:before:hidden prose-code:after:hidden max-w-none">
               <MDXContent />
+              {/* Newsletter Signup - After Reading */}
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                className="pt-8 mt-16 border-t border-white/10"
+              >
+                <NewsletterSignup
+                  title="Keep Learning"
+                  description="Get my latest methods and insights delivered to your inbox."
+                  className="mx-auto max-w-2xl"
+                />
+              </motion.div>
             </div>
           </article>
 

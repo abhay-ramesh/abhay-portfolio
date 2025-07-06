@@ -1350,6 +1350,17 @@ export default function PortfolioV3() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [pinnedRepos, setPinnedRepos] = useState<GitHubRepo[]>([]);
   const [contributions, setContributions] = useState<GitHubContribution[]>([]);
+
+  // Contact form state
+  const [contactForm, setContactForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -1358,29 +1369,7 @@ export default function PortfolioV3() {
   });
 
   useEffect(() => {
-    // Fetch top starred repos
-    fetch(
-      "https://api.github.com/users/abhay-ramesh/repos?sort=stars&per_page=6",
-      {
-        headers: {
-          Accept: "application/vnd.github.v3+json",
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        const sortedRepos = data
-          .filter((repo: GitHubRepo) => !repo.fork)
-          .sort(
-            (a: GitHubRepo, b: GitHubRepo) =>
-              b.stargazers_count - a.stargazers_count
-          )
-          .slice(0, 4);
-        setPinnedRepos(sortedRepos);
-      })
-      .catch(console.error);
-
-    // Fetch contribution data using GitHub GraphQL API
+    // Fetch pinned repos and contribution data using GitHub GraphQL API
     fetch("https://api.github.com/graphql", {
       method: "POST",
       headers: {
@@ -1390,6 +1379,22 @@ export default function PortfolioV3() {
       body: JSON.stringify({
         query: `query {
           user(login: "abhay-ramesh") {
+            pinnedItems(first: 6, types: [REPOSITORY]) {
+              nodes {
+                ... on Repository {
+                  name
+                  description
+                  stargazerCount
+                  url
+                  primaryLanguage {
+                    name
+                  }
+                  forkCount
+                  isFork
+                  homepageUrl
+                }
+              }
+            }
             contributionsCollection {
               contributionCalendar {
                 totalContributions
@@ -1406,20 +1411,41 @@ export default function PortfolioV3() {
       }),
     })
       .then((res) => res.json())
-      .then((data: GitHubGraphQLResponse) => {
-        console.log("GitHub API Response:", data); // Debug log
-        const calendar =
-          data.data.user.contributionsCollection.contributionCalendar;
-        const contributions = calendar.weeks.flatMap(
-          (week: GitHubContributionWeek) =>
-            week.contributionDays.map((day: GitHubContributionDay) => ({
-              date: day.date,
-              count: day.contributionCount,
-              level: getContributionLevel(day.contributionCount),
-            }))
-        );
-        console.log("Processed Contributions:", contributions); // Debug log
-        setContributions(contributions);
+      .then((data) => {
+        console.log("GitHub GraphQL Response:", data); // Debug log
+
+        // Process pinned repositories
+        if (data.data?.user?.pinnedItems?.nodes) {
+          const pinnedRepos = data.data.user.pinnedItems.nodes.map(
+            (repo: any) => ({
+              name: repo.name,
+              description: repo.description,
+              stargazers_count: repo.stargazerCount,
+              html_url: repo.url,
+              language: repo.primaryLanguage?.name || "Unknown",
+              forks_count: repo.forkCount,
+              fork: repo.isFork,
+              homepage: repo.homepageUrl,
+            })
+          );
+          setPinnedRepos(pinnedRepos);
+        }
+
+        // Process contribution data
+        if (data.data?.user?.contributionsCollection?.contributionCalendar) {
+          const calendar =
+            data.data.user.contributionsCollection.contributionCalendar;
+          const contributions = calendar.weeks.flatMap(
+            (week: GitHubContributionWeek) =>
+              week.contributionDays.map((day: GitHubContributionDay) => ({
+                date: day.date,
+                count: day.contributionCount,
+                level: getContributionLevel(day.contributionCount),
+              }))
+          );
+          console.log("Processed Contributions:", contributions); // Debug log
+          setContributions(contributions);
+        }
       })
       .catch(console.error);
   }, []);
@@ -1447,6 +1473,37 @@ export default function PortfolioV3() {
         return "bg-white/80";
       default:
         return "bg-white/5";
+    }
+  };
+
+  // Contact form submission handler
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(contactForm),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send message");
+      }
+
+      setIsSuccess(true);
+      setContactForm({ name: "", email: "", message: "" });
+
+      // Reset success state after 5 seconds
+      setTimeout(() => setIsSuccess(false), 5000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -1847,50 +1904,112 @@ export default function PortfolioV3() {
                   Open to new opportunities and collaborations.
                 </motion.p>
 
-                <form className="mx-auto mt-8 space-y-4 max-w-xl md:mt-12 md:space-y-6">
-                  <FormInput label="Name" name="name" required />
-                  <FormInput label="Email" type="email" name="email" required />
-                  <FormInput
-                    label="Message"
-                    textarea
-                    name="message"
-                    rows={4}
-                    required
-                  />
+                {isSuccess ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="mx-auto max-w-xl text-center"
+                  >
+                    <div className="p-6 rounded-lg border bg-green-500/10 border-green-500/20">
+                      <div className="mb-4 text-green-400">
+                        <svg
+                          className="mx-auto w-12 h-12"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      <h3 className="mb-2 text-xl font-bold text-white font-clash">
+                        Message Sent! 🎉
+                      </h3>
+                      <p className="text-white/60">
+                        Thank you for reaching out. I&apos;ll get back to you
+                        soon!
+                      </p>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <form
+                    onSubmit={handleContactSubmit}
+                    className="mx-auto mt-8 space-y-4 max-w-xl md:mt-12 md:space-y-6"
+                  >
+                    <FormInput
+                      label="Name"
+                      name="name"
+                      value={contactForm.name}
+                      onChange={(e) =>
+                        setContactForm((prev) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
+                      required
+                    />
+                    <FormInput
+                      label="Email"
+                      type="email"
+                      name="email"
+                      value={contactForm.email}
+                      onChange={(e) =>
+                        setContactForm((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
+                      }
+                      required
+                    />
+                    <FormInput
+                      label="Message"
+                      textarea
+                      name="message"
+                      value={contactForm.message}
+                      onChange={(e) =>
+                        setContactForm((prev) => ({
+                          ...prev,
+                          message: e.target.value,
+                        }))
+                      }
+                      rows={4}
+                      required
+                    />
 
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="py-3 w-full font-medium text-black bg-white rounded-lg transition-colors md:py-4 hover:bg-white/90"
-                  >
-                    Send Message
-                  </motion.button>
-                </form>
+                    {error && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="p-3 text-sm text-center text-red-400 rounded-lg border bg-red-500/10 border-red-500/20"
+                      >
+                        {error}
+                      </motion.div>
+                    )}
 
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ delay: 0.3, duration: 0.5 }}
-                  viewport={{ once: true }}
-                  className="flex flex-col gap-4 justify-center mt-12 md:flex-row md:gap-8 md:mt-16"
-                >
-                  <motion.a
-                    whileHover={{ y: -2 }}
-                    href="https://www.linkedin.com/in/abhay-ramesh/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-base md:text-lg tracking-[0.3em] text-white/60 hover:text-white transition-colors font-medium"
-                  >
-                    LINKEDIN
-                  </motion.a>
-                  <motion.a
-                    whileHover={{ y: -2 }}
-                    href="mailto:contact@abhayramesh.com"
-                    className="text-base md:text-lg tracking-[0.3em] text-white/60 hover:text-white transition-colors font-medium"
-                  >
-                    EMAIL
-                  </motion.a>
-                </motion.div>
+                    <motion.button
+                      type="submit"
+                      disabled={isSubmitting}
+                      whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                      whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                      className="py-3 w-full font-medium text-black bg-white rounded-lg transition-colors md:py-4 hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSubmitting ? (
+                        <span className="flex justify-center items-center space-x-2">
+                          <div className="w-4 h-4 rounded-full border-2 border-black animate-spin border-t-transparent"></div>
+                          <span>Sending...</span>
+                        </span>
+                      ) : (
+                        "Send Message"
+                      )}
+                    </motion.button>
+                  </form>
+                )}
               </div>
             </section>
           </div>
