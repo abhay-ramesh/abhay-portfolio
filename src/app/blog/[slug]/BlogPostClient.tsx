@@ -67,7 +67,7 @@ export default function BlogPostClient({ post }: { post: Post }) {
       transition={{ duration: 0.5 }}
       className="min-h-screen py-16 text-white bg-[#0A0A0A] md:py-32"
     >
-      <div className="container px-4 mx-auto max-w-4xl">
+      <div className="container px-4 mx-auto max-w-5xl">
         {/* Back to Blog */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
@@ -111,7 +111,10 @@ export default function BlogPostClient({ post }: { post: Post }) {
                 ))}
               </div>
 
-              <h1 className="mb-4 text-3xl font-bold md:text-5xl font-clash">
+              <h1
+                id="title"
+                className="mb-4 text-3xl font-bold md:text-5xl font-clash"
+              >
                 {post.title}
               </h1>
 
@@ -139,7 +142,7 @@ export default function BlogPostClient({ post }: { post: Post }) {
 
           {/* Table of Contents */}
           <div className="hidden w-56 max-w-fit min-w-[14rem] md:block">
-            <TableOfContents content={post.body.raw} />
+            <TableOfContents content={post.body.raw} title={post.title} />
           </div>
         </div>
 

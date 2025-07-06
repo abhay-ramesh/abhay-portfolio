@@ -9,6 +9,8 @@ export function extractHeadings(content: string): TableOfContentsItem[] {
     .split("\n")
     .filter((line) => line.match(/^#{1,3} /));
 
+  const usedUrls = new Set<string>();
+
   return headingLines
     .map((raw) => {
       const match = raw.match(/^(#{1,3})\s+(.+)$/);
@@ -16,10 +18,19 @@ export function extractHeadings(content: string): TableOfContentsItem[] {
 
       const [, level, title] = match;
 
-      const url = title
+      let baseUrl = title
         .toLowerCase()
         .replace(/[^a-z0-9\s-]/g, "")
         .replace(/\s+/g, "-");
+
+      // Ensure unique URL
+      let url = baseUrl;
+      let counter = 1;
+      while (usedUrls.has(url)) {
+        url = `${baseUrl}-${counter}`;
+        counter++;
+      }
+      usedUrls.add(url);
 
       return {
         title,
@@ -32,16 +43,27 @@ export function extractHeadings(content: string): TableOfContentsItem[] {
 
 export function addHeadingIds(content: string): string {
   const lines = content.split("\n");
+  const usedIds = new Set<string>();
+
   return lines
     .map((line) => {
       const match = line.match(/^(#{1,3})\s+(.+)$/);
       if (!match) return line;
 
       const [, level, title] = match;
-      const id = title
+      let baseId = title
         .toLowerCase()
         .replace(/[^a-z0-9\s-]/g, "")
         .replace(/\s+/g, "-");
+
+      // Ensure unique ID
+      let id = baseId;
+      let counter = 1;
+      while (usedIds.has(id)) {
+        id = `${baseId}-${counter}`;
+        counter++;
+      }
+      usedIds.add(id);
 
       return `${level} ${title} {#${id}}`;
     })
