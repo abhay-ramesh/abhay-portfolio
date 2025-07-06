@@ -23,11 +23,18 @@ export function extractHeadings(content: string): TableOfContentsItem[] {
         .replace(/[^a-z0-9\s-]/g, "")
         .replace(/\s+/g, "-");
 
-      // Ensure unique URL
+      // Ensure unique URL with more descriptive suffixes
       let url = baseUrl;
       let counter = 1;
       while (usedUrls.has(url)) {
-        url = `${baseUrl}-${counter}`;
+        // Try to make it more descriptive by adding section context
+        const levelPrefix =
+          level.length === 1
+            ? "section"
+            : level.length === 2
+            ? "subsection"
+            : "item";
+        url = `${baseUrl}-${levelPrefix}-${counter}`;
         counter++;
       }
       usedUrls.add(url);
@@ -56,11 +63,18 @@ export function addHeadingIds(content: string): string {
         .replace(/[^a-z0-9\s-]/g, "")
         .replace(/\s+/g, "-");
 
-      // Ensure unique ID
+      // Ensure unique ID with more descriptive suffixes
       let id = baseId;
       let counter = 1;
       while (usedIds.has(id)) {
-        id = `${baseId}-${counter}`;
+        // Try to make it more descriptive by adding section context
+        const levelPrefix =
+          level.length === 1
+            ? "section"
+            : level.length === 2
+            ? "subsection"
+            : "item";
+        id = `${baseId}-${levelPrefix}-${counter}`;
         counter++;
       }
       usedIds.add(id);
