@@ -1,9 +1,9 @@
 "use client";
 
+import { TableOfContents } from "@/components/TableOfContents";
 import { Post, allPosts } from "contentlayer/generated";
 import { motion } from "framer-motion";
 import { useMDXComponent } from "next-contentlayer/hooks";
-import Image from "next/image";
 import Link from "next/link";
 
 function BlogNavigation({ currentPost }: { currentPost: Post }) {
@@ -96,80 +96,52 @@ export default function BlogPostClient({ post }: { post: Post }) {
           </Link>
         </motion.div>
 
-        <div className="mb-8 md:mb-16">
-          <motion.h1
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mb-4 text-4xl font-bold md:text-6xl font-clash"
-          >
-            {post.title}
-          </motion.h1>
+        <div className="flex relative gap-16">
+          {/* Main Content */}
+          <article className="flex-grow min-w-0">
+            <header className="mb-8 md:mb-16">
+              <div className="flex flex-wrap gap-3 mb-4">
+                {post.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-2 py-1 text-xs whitespace-nowrap rounded md:text-sm bg-white/10 text-white/80"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
 
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-wrap gap-4 items-center text-white/60"
-          >
-            <time dateTime={post.date}>
-              {new Date(post.date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </time>
-            <span>•</span>
-            <span>{post.readTime} read</span>
-          </motion.div>
+              <h1 className="mb-4 text-3xl font-bold md:text-5xl font-clash">
+                {post.title}
+              </h1>
 
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-wrap gap-2 mt-4"
-          >
-            {post.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-1 text-xs whitespace-nowrap rounded md:text-sm bg-white/10"
-              >
-                {tag}
-              </span>
-            ))}
-          </motion.div>
+              <p className="mb-4 text-lg text-white/60 md:text-xl">
+                {post.excerpt}
+              </p>
 
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="flex gap-4 items-center mt-8"
-          >
-            <div className="overflow-hidden relative w-12 h-12 rounded-full">
-              <Image
-                src="https://github.com/abhay-ramesh.png"
-                alt="Abhay Ramesh"
-                fill
-                className="object-cover"
-                sizes="48px"
-                priority
-              />
+              <div className="flex flex-wrap gap-4 items-center text-sm text-white/40">
+                <time dateTime={post.date}>
+                  {new Date(post.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+                <span>•</span>
+                <span>{post.readTime} read</span>
+              </div>
+            </header>
+
+            <div className="prose prose-invert prose-pre:!bg-white/5 prose-pre:!border prose-pre:!border-white/10 prose-code:before:hidden prose-code:after:hidden max-w-none">
+              <MDXContent />
             </div>
-            <div>
-              <div className="font-medium">Abhay Ramesh</div>
-              <div className="text-sm text-white/60">Full Stack Developer</div>
-            </div>
-          </motion.div>
+          </article>
+
+          {/* Table of Contents */}
+          <div className="hidden w-56 max-w-fit min-w-[14rem] md:block">
+            <TableOfContents content={post.body.raw} />
+          </div>
         </div>
-
-        <motion.article
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="max-w-none prose prose-invert prose-lg"
-        >
-          <MDXContent key={post.slug} />
-        </motion.article>
 
         {/* Blog Navigation */}
         <BlogNavigation currentPost={post} />

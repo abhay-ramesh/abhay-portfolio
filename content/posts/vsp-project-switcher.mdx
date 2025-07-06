@@ -1,0 +1,320 @@
+---
+title: "VSP: My Lightning-Fast Project Switcher & Editor Launcher"
+excerpt: "How I built a custom shell function to jump between projects and open editors in seconds using fzf, zoxide, and smart directory ranking"
+date: "2025-07-06"
+author: "Abhay Ramesh"
+readTime: "5 min"
+tags: [Development, Shell, Productivity, Tools, Terminal, fzf, zoxide]
+---
+
+As a developer, I'm constantly switching between different projects throughout the day. Whether I'm working on a client project, experimenting with a new side project, or contributing to open source, the constant `cd`-ing and opening editors was becoming a productivity bottleneck.
+
+That's when I built **VSP** (Visual Studio Project switcher) - a custom shell function that gets me from zero to coding in under 3 seconds. Here's how it works and how you can build your own.
+
+## The Problem
+
+Before VSP, my workflow looked like this:
+
+1. `cd ~/Desktop/Code`
+2. `ls` to see what projects I have
+3. `cd project-name`
+4. `code .` or `nvim .`
+5. Repeat this 10-20 times a day
+
+This was slow, manual, and required me to remember exact project names. I wanted something that would:
+
+- Show me projects I've been working on recently
+- Let me fuzzy search through all my projects
+- Preview the project structure before opening
+- Let me choose which editor to open it with
+
+## The Solution: VSP Function
+
+Here's the core `vsp` function that solved all these problems:
+
+```bash
+function vsp() {
+  local CODE_PATH="${HOME}/Desktop/Code"
+  [ ! -d "$CODE_PATH" ] && echo "Directory does not exist: $CODE_PATH" && return 1
+
+  # Get recently modified directories
+  local recently_modified
+  recently_modified="$(ls -td "${CODE_PATH}"/*/ 2>/dev/null | head -5 | sed 's:/$::')"
+
+  # Get top ranked directories from zoxide
+  local top_ranked=""
+  if command -v zoxide >/dev/null 2>&1; then
+    top_ranked="$(
+      zoxide query -ls 2>/dev/null \
+      | awk -v codePath="$CODE_PATH" '$3 ~ "^"codePath {print $0}' \
+      | sort -k1,1nr \
+      | head -5 \
+      | awk '{print $3}'
+    )"
+  fi
+
+  # Get recently accessed directories from zoxide
+  local top_recent=""
+  if command -v zoxide >/dev/null 2>&1; then
+    top_recent="$(
+      zoxide query -ls 2>/dev/null \
+      | awk -v codePath="$CODE_PATH" '$3 ~ "^"codePath {print $0}' \
+      | sort -k2,2nr \
+      | head -5 \
+      | awk '{print $3}'
+    )"
+  fi
+
+  # Get all directories
+  local all_dirs
+  all_dirs="$(ls -d "${CODE_PATH}"/*/ 2>/dev/null | sed 's:/$::')"
+
+  # Combine and deduplicate
+  local combined
+  combined="$(
+    {
+      [ -n "$recently_modified" ] && echo "$recently_modified"
+      [ -n "$top_ranked" ]        && echo "$top_ranked"
+      [ -n "$top_recent" ]        && echo "$top_recent"
+      [ -n "$all_dirs" ]          && echo "$all_dirs"
+    } | awk 'NF && !seen[$0]++'
+  )"
+
+  # Format for fzf
+  local final_list
+  final_list="$(
+    while IFS= read -r dir; do
+      [ -z "$dir" ] && continue
+      [ -d "$dir" ] || continue
+      local bname
+      bname="$(basename "$dir")"
+      printf "%s\t%s\n" "$bname" "$dir"
+    done <<< "$combined"
+  )"
+
+  # Filter out any artifacts
+  final_list="$(echo "$final_list" | grep -v '^bname=')"
+  [ -z "$final_list" ] && echo "No directories found." && return 0
+
+  # Use fzf to select directory with preview
+  local selected_line
+  selected_line="$(
+    echo "$final_list" \
+    | fzf \
+        --prompt="Select a directory: " \
+        --with-nth=1 \
+        --delimiter='\t' \
+        --height=80% \
+        --border \
+        --preview='
+          dirpath={2}
+          # Try exa -> tree -> ls -al
+          if command -v exa >/dev/null 2>&1; then
+            exa -T --level=1 --long --group-directories-first "$dirpath" 2>/dev/null || ls -al "$dirpath"
+          else
+            tree -L 1 "$dirpath" 2>/dev/null || ls -al "$dirpath"
+          fi
+
+          echo
+          readmefile=$(ls -1 "$dirpath"/README* 2>/dev/null | head -n1)
+          if [ -f "$readmefile" ]; then
+            echo "=== $(basename "$readmefile") ==="
+            if command -v bat >/dev/null 2>&1; then
+              bat --paging=never "$readmefile"
+            else
+              cat "$readmefile"
+            fi
+          fi
+        '
+  )"
+
+  [ -z "$selected_line" ] && return
+  local selected_dir
+  selected_dir="$(awk -F'\t' '{print $2}' <<< "$selected_line")"
+  [ -z "$selected_dir" ] || [ ! -d "$selected_dir" ] && echo "Invalid directory: '$selected_dir'" && return 1
+
+  cd "$selected_dir" || return
+
+  # Choose editor
+  local choice
+  choice="$(
+    echo -e "code\tOpen with VS Code\ncursor\tOpen with Cursor\nnvims\tOpen with Neovim Chooser\nnvim\tOpen with Neovim\nnvim-lazy\tOpen with LazyVim\nnvim-chad\tOpen with NvChad\nnvim-astro\tOpen with AstroNvim" \
+    | fzf --prompt="Choose an editor: " \
+          --with-nth=1 \
+          --delimiter='\t' \
+          --height=10 \
+          --border \
+          --preview='echo {2}'
+  )"
+
+  case "$choice" in
+    code*) code . ;;
+    cursor*) cursor . ;;
+    nvims*) nvims ;;
+    nvim*) nvim ;;
+    nvim-lazy*) nvim-lazy ;;
+    nvim-chad*) nvim-chad ;;
+    nvim-astro*) nvim-astro ;;
+    *) code . ;;
+  esac
+}
+```
+
+## How It Works
+
+### 1. **Smart Directory Ranking**
+
+The function combines multiple sources to intelligently rank your projects:
+
+- **Recently modified**: Projects you've worked on recently
+- **Most accessed**: Projects you visit most often (via zoxide)
+- **Recently accessed**: Projects you've visited recently (via zoxide)
+- **All projects**: Everything in your Code directory
+
+### 2. **Fuzzy Search with Preview**
+
+Using `fzf`, you can:
+
+- Type a few letters to filter projects
+- See a live preview of the project structure
+- View README files automatically
+- Navigate with arrow keys or continue typing
+
+### 3. **Editor Selection**
+
+After selecting a project, you get another fzf menu to choose your editor:
+
+- VS Code
+- Cursor
+- Multiple Neovim configurations
+- Defaults to VS Code if you cancel
+
+## Prerequisites
+
+To use this function, you'll need to install these tools:
+
+### Required
+
+```bash
+# fzf - Fuzzy finder
+# macOS
+brew install fzf
+
+# Ubuntu/Debian
+sudo apt install fzf
+
+# Arch Linux
+sudo pacman -S fzf
+```
+
+### Highly Recommended
+
+```bash
+# zoxide - Smart directory jumping
+# macOS
+brew install zoxide
+
+# Ubuntu/Debian (requires Rust/Cargo)
+curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+
+# Arch Linux
+sudo pacman -S zoxide
+```
+
+### Optional (for better previews)
+
+```bash
+# exa - Better ls alternative
+# macOS
+brew install exa
+
+# Ubuntu/Debian
+sudo apt install exa
+
+# tree - Directory tree viewer
+# macOS
+brew install tree
+
+# Ubuntu/Debian
+sudo apt install tree
+
+# bat - Better cat with syntax highlighting
+# macOS
+brew install bat
+
+# Ubuntu/Debian
+sudo apt install bat
+```
+
+## Setup
+
+1. Add the `vsp` function to your shell configuration file (`~/.zshrc` or `~/.bashrc`)
+
+2. If using zoxide, add this to your shell config:
+
+```bash
+eval "$(zoxide init zsh)"  # or bash instead of zsh
+```
+
+3. Make sure your projects are in `~/Desktop/Code` or modify the `CODE_PATH` variable
+
+4. Reload your shell:
+
+```bash
+source ~/.zshrc
+```
+
+## Usage
+
+Just type `vsp` anywhere in your terminal, and you'll get:
+
+1. A fuzzy-searchable list of your projects
+2. Live preview of project structure and README
+3. Quick editor selection
+4. Instant navigation and opening
+
+## The Result
+
+What used to take 10-15 seconds and multiple commands now takes 2-3 seconds:
+
+1. Type `vsp`
+2. Type a few letters of your project name
+3. Hit Enter
+4. Choose your editor
+5. Start coding!
+
+## Neovim Switcher Bonus
+
+I also included a Neovim switcher function that lets me choose between different Neovim configurations:
+
+```bash
+# NeoVim Switcher
+alias nvim-lazy="NVIM_APPNAME=LazyVim nvim"
+alias nvim-chad="NVIM_APPNAME=NvChad nvim"
+alias nvim-astro="NVIM_APPNAME=AstroNvim nvim"
+
+function nvims() {
+  items=("default" "LazyVim" "NvChad" "AstroNvim")
+  config=$(printf "%s\n" "${items[@]}" | fzf --prompt=" Neovim Config  " --height=~50% --layout=reverse --border --exit-0)
+  if [[ -z $config ]]; then
+    echo "Nothing selected"
+    return 0
+  elif [[ $config == "default" ]]; then
+    config=""
+  fi
+  NVIM_APPNAME=$config nvim $@
+}
+
+# Bind Ctrl+A to open nvims
+bindkey -s ^a "nvims\n"
+```
+
+## Wrap Up
+
+This simple function has saved me countless hours and made context-switching between projects almost effortless. The combination of smart ranking, fuzzy search, and editor choice makes it incredibly powerful.
+
+Try building your own version and customize it for your workflow. The key is making it so fast and convenient that you actually use it every day!
+
+---
+
+_What's your favorite productivity hack for project switching? Let me know on [Twitter](https://twitter.com/yourusername)!_
