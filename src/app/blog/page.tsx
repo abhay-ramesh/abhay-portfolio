@@ -13,7 +13,7 @@ export default function BlogPage() {
   });
 
   return (
-    <div className="min-h-screen py-16 text-white bg-[#0A0A0A] md:py-32">
+    <div className="min-h-screen py-16 pt-8 text-white bg-[#0A0A0A] md:py-32 md:pt-16">
       <div className="container px-4 mx-auto max-w-4xl">
         <div className="mb-12 md:mb-20">
           <h1 className="mb-4 text-4xl font-bold md:text-6xl font-clash">
@@ -29,7 +29,7 @@ export default function BlogPage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="group block p-6 transition-all duration-300 rounded-lg hover:bg-white/5"
+              className="block p-6 rounded-lg transition-all duration-300 group hover:bg-white/5"
             >
               <article>
                 <div className="flex flex-wrap gap-3 mb-4">

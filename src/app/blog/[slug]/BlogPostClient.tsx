@@ -65,7 +65,7 @@ export default function BlogPostClient({ post }: { post: Post }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen py-16 text-white bg-[#0A0A0A] md:py-32"
+      className="min-h-screen py-16 pt-8 text-white bg-[#0A0A0A] md:py-32 md:pt-16"
     >
       <div className="container px-4 mx-auto max-w-5xl">
         {/* Back to Blog */}
