@@ -2168,10 +2168,35 @@ export default function PortfolioV3() {
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 0.2, duration: 0.5 }}
                   viewport={{ once: true }}
-                  className="mb-8 text-lg md:mb-12 md:text-xl text-white/80"
+                  className="mb-4 text-lg md:mb-6 md:text-xl text-white/80"
                 >
                   Open to full-time roles and collaborations. Hiring? Get in
                   touch.
+                </motion.p>
+
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                  viewport={{ once: true }}
+                  className="mb-8 text-sm md:mb-12 md:text-base text-white/60"
+                >
+                  Prefer to reach out directly?{" "}
+                  <a
+                    href="mailto:ramesh.abhay14@gmail.com"
+                    className="text-white/80 underline decoration-white/30 underline-offset-2 transition-colors hover:text-white hover:decoration-white/50"
+                  >
+                    Email
+                  </a>
+                  {" · "}
+                  <a
+                    href="https://www.linkedin.com/in/abhay-ramesh/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/80 underline decoration-white/30 underline-offset-2 transition-colors hover:text-white hover:decoration-white/50"
+                  >
+                    LinkedIn
+                  </a>
                 </motion.p>
 
                 {isSuccess ? (
