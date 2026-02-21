@@ -1,3 +1,4 @@
+import { HireBar } from "@/components/HireBar";
 import { cn } from "@/lib/utils";
 import { clash, inter, satoshi } from "./fonts";
 import "./globals.css";
@@ -33,6 +34,7 @@ export default function RootLayout({
       >
         <JsonLd />
         <GoogleAnalytics />
+        <HireBar />
         <main className="flex flex-col pb-4 w-full h-full grow sm:pt-4">
           <PostHogProvider>{children}</PostHogProvider>
         </main>
