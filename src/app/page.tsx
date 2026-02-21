@@ -121,10 +121,10 @@ const textReveal = {
 const experiences = [
   {
     role: "Founder & CEO",
-    company: "Hunchbite Technologies",
+    company: "Hunchbite Technologies Pvt. Ltd.",
     period: "Present",
     description:
-      "Web design and CRO agency helping companies grow through optimized websites and conversion strategies.",
+      "Software development studio building production-grade web applications, e-commerce platforms, SaaS products, and custom software — shipped in under two weeks. React, Next.js, TypeScript.",
   },
   {
     role: "Senior Frontend Engineer",
@@ -158,6 +158,37 @@ const skills = [
   { name: "AWS", level: 75 },
   { name: "Docker", level: 80 },
   { name: "PostgreSQL", level: 85 },
+];
+
+const ventures = [
+  {
+    name: "Hunchbite",
+    tagline: "Software development agency",
+    description:
+      "Production-grade web applications, e-commerce platforms, SaaS products, and custom software — shipped in under two weeks. React, Next.js, TypeScript.",
+    url: "https://hunchbite.com",
+  },
+  {
+    name: "Fabitin",
+    tagline: "On-demand manufacturing",
+    description:
+      "Precision fabrication and sheet metal on demand. Upload your DXF, get an instant quote, and receive parts made with industrial quality. Laser cutting, no minimums.",
+    url: "https://fabitin.com",
+  },
+  {
+    name: "BuildPDFs",
+    tagline: "AI PDF generator",
+    description:
+      "Create professional PDFs—ebooks, lead magnets, whitepapers, course workbooks—with AI. Design and export in hours, no design skills required.",
+    url: "https://buildpdfs.com",
+  },
+  {
+    name: "Apex Spindle Tools",
+    tagline: "CNC tools store",
+    description:
+      "Precision CNC tooling: ER collets, end mills, collet chucks, and tool holders. Professional-grade machining tools for mills, lathes, and routers.",
+    url: "https://apexspindle.com",
+  },
 ];
 
 const TiltCard = ({ children }: { children: React.ReactNode }) => {
@@ -235,14 +266,14 @@ const ProjectCard = ({ repo }: { repo: GitHubRepo }) => {
       if (repo.homepage) {
         try {
           const response = await fetch(
-            `/api/og?url=${encodeURIComponent(repo.homepage)}`
+            `/api/og?url=${encodeURIComponent(repo.homepage)}`,
           );
           const data = await response.json();
           if (data.ogImage) {
             setOgImage(data.ogImage);
           } else {
             const response = await fetch(
-              `/api/og?url=${encodeURIComponent(repo.html_url)}`
+              `/api/og?url=${encodeURIComponent(repo.html_url)}`,
             );
             const data = await response.json();
             if (data.ogImage) {
@@ -614,7 +645,7 @@ const FormInput = ({
 
   const handleFocus = () => setIsFocused(true);
   const handleBlur = (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setIsFocused(!!e.target.value);
   };
@@ -683,6 +714,7 @@ const Navigation = () => {
     "home",
     "about",
     "experience",
+    "ventures",
     "projects",
     "blog",
     "contact",
@@ -709,7 +741,7 @@ const Navigation = () => {
       {
         threshold: Array.from({ length: 21 }, (_, i) => i * 0.05),
         rootMargin: "-20% 0px -20% 0px",
-      }
+      },
     );
 
     sections.forEach((section) => {
@@ -908,10 +940,10 @@ const CustomCursor = () => {
     const checkPointer = () => {
       const element = document.elementFromPoint(
         parseInt(cursor.style.transform.split("(")[1]),
-        parseInt(cursor.style.transform.split(",")[1])
+        parseInt(cursor.style.transform.split(",")[1]),
       );
       setIsPointer(
-        window.getComputedStyle(element || document.body).cursor === "pointer"
+        window.getComputedStyle(element || document.body).cursor === "pointer",
       );
     };
 
@@ -1012,9 +1044,9 @@ const ScrambleText = ({ text }: { text: string }) => {
         .map((char) =>
           char === " "
             ? " "
-            : characters[Math.floor(Math.random() * characters.length)]
+            : characters[Math.floor(Math.random() * characters.length)],
         )
-        .join("")
+        .join(""),
     );
 
     // Function to scramble remaining letters
@@ -1342,8 +1374,139 @@ const BlogCard = ({ post }: { post: Post }) => {
   );
 };
 
+const VentureCard = ({ venture }: { venture: (typeof ventures)[0] }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <a
+      href={venture.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block h-full"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
+        className="relative h-full group"
+      >
+        <motion.div
+          className="absolute inset-0 rounded-lg opacity-20"
+          animate={{
+            opacity: isHovered ? 0.3 : 0.1,
+          }}
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+          }}
+        />
+
+        <motion.div
+          className="overflow-hidden absolute inset-0 rounded-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <motion.div
+            className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white to-transparent"
+            initial={{ x: "-100%" }}
+            animate={isHovered ? { x: ["100%", "-100%"] } : { x: "-100%" }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
+          <motion.div
+            className="absolute top-0 right-0 w-[1px] h-full bg-gradient-to-b from-transparent via-white to-transparent"
+            initial={{ y: "-100%" }}
+            animate={isHovered ? { y: ["100%", "-100%"] } : { y: "-100%" }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear",
+              delay: 0.5,
+            }}
+          />
+          <motion.div
+            className="absolute bottom-0 right-0 w-full h-[1px] bg-gradient-to-l from-transparent via-white to-transparent"
+            initial={{ x: "100%" }}
+            animate={isHovered ? { x: ["-100%", "100%"] } : { x: "100%" }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear",
+              delay: 1,
+            }}
+          />
+          <motion.div
+            className="absolute top-0 left-0 w-[1px] h-full bg-gradient-to-t from-transparent via-white to-transparent"
+            initial={{ y: "100%" }}
+            animate={isHovered ? { y: ["-100%", "100%"] } : { y: "100%" }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear",
+              delay: 1.5,
+            }}
+          />
+        </motion.div>
+
+        <motion.div
+          className="absolute inset-0 rounded-lg border border-white/10"
+          animate={{
+            borderColor: isHovered
+              ? "rgba(255,255,255,0.2)"
+              : "rgba(255,255,255,0.1)",
+          }}
+          transition={{ duration: 0.3 }}
+        />
+
+        <div className="flex relative flex-col p-4 h-full md:p-6">
+          <span className="inline-block px-2 py-1 mb-3 text-xs font-medium rounded md:text-sm bg-white/10 w-fit">
+            {venture.tagline}
+          </span>
+
+          <div className="flex flex-col flex-grow">
+            <h3 className="mb-3 text-xl font-bold transition-colors md:text-2xl font-clash md:mb-4 group-hover:text-white text-white/90">
+              {venture.name}
+            </h3>
+
+            <p className="flex-grow mb-4 text-sm md:text-base text-white/60 line-clamp-3 md:mb-6">
+              {venture.description}
+            </p>
+
+            <motion.div
+              className="flex gap-2 items-center text-sm font-medium transition-colors text-white/60 group-hover:text-white"
+              animate={{ x: isHovered ? 4 : 0 }}
+            >
+              <span>Visit</span>
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+            </motion.div>
+          </div>
+        </div>
+      </motion.div>
+    </a>
+  );
+};
+
 const blogPosts = allPosts.sort(
-  (a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  (a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime(),
 );
 
 export default function PortfolioV3() {
@@ -1426,7 +1589,7 @@ export default function PortfolioV3() {
               forks_count: repo.forkCount,
               fork: repo.isFork,
               homepage: repo.homepageUrl,
-            })
+            }),
           );
           setPinnedRepos(pinnedRepos);
         }
@@ -1441,7 +1604,7 @@ export default function PortfolioV3() {
                 date: day.date,
                 count: day.contributionCount,
                 level: getContributionLevel(day.contributionCount),
-              }))
+              })),
           );
           console.log("Processed Contributions:", contributions); // Debug log
           setContributions(contributions);
@@ -1723,6 +1886,29 @@ export default function PortfolioV3() {
               </div>
             </section>
 
+            {/* Ventures Section */}
+            <section
+              id="ventures"
+              className="px-4 py-16 min-h-screen border-b md:px-8 md:py-32 border-white/10"
+            >
+              <ScrambleText text="VENTURES" />
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                viewport={{ once: true }}
+                className="mb-8 text-lg leading-relaxed md:mb-12 md:text-xl text-white/80"
+              >
+                Products and companies I build and run.
+              </motion.p>
+
+              <div className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2">
+                {ventures.map((venture) => (
+                  <VentureCard key={venture.name} venture={venture} />
+                ))}
+              </div>
+            </section>
+
             {/* Projects Section */}
             <section
               id="projects"
@@ -1775,7 +1961,7 @@ export default function PortfolioV3() {
                         className="grid grid-rows-7 auto-rows-[17px] gap-[3px]"
                         style={{
                           gridTemplateColumns: `repeat(${Math.ceil(
-                            contributions.length / 7
+                            contributions.length / 7,
                           )}, 17px)`,
                         }}
                       >
@@ -1794,7 +1980,7 @@ export default function PortfolioV3() {
 
                             // Skip future dates
                             const contributionDate = new Date(
-                              contribution.date
+                              contribution.date,
                             );
                             const today = new Date();
                             if (contributionDate > today) {
@@ -1817,7 +2003,7 @@ export default function PortfolioV3() {
                               >
                                 <div
                                   className={`w-[15px] h-[15px] rounded-sm ${getContributionColor(
-                                    contribution.level
+                                    contribution.level,
                                   )} ${
                                     isToday
                                       ? "ring-2 ring-white ring-offset-1 ring-offset-[#0A0A0A]"
@@ -1833,7 +2019,7 @@ export default function PortfolioV3() {
                                 </div>
                               </div>
                             );
-                          })
+                          }),
                         )}
                       </div>
                     </div>
@@ -1845,9 +2031,7 @@ export default function PortfolioV3() {
                     {[0, 1, 2, 3, 4].map((level) => (
                       <div
                         key={level}
-                        className={`w-3 h-3 rounded-sm ${getContributionColor(
-                          level
-                        )}`}
+                        className={`w-3 h-3 rounded-sm ${getContributionColor(level)}`}
                       />
                     ))}
                     <span>More</span>
