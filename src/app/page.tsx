@@ -64,30 +64,100 @@ interface BlogPost {
   tags: string[];
 }
 
+const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const SCRAMBLE_SPEED_MS = 35;
+const REVEAL_DELAY_MS = 80;
+const CYCLE_INTERVAL_MS = 4000;
+
 const AnimatedText = ({ texts, className = "" }: AnimatedTextProps) => {
   const [index, setIndex] = useState(0);
+  const [displayText, setDisplayText] = useState(texts[0] ?? "");
+  const currentText = texts[index] ?? "";
 
+  // Cycle to next text after interval
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % texts.length);
-    }, 3000);
+    }, CYCLE_INTERVAL_MS);
     return () => clearInterval(timer);
   }, [texts.length]);
 
+  // Scramble + reveal when current text changes
+  useEffect(() => {
+    const finalChars = currentText.split("");
+    let currentIndex = 0;
+    let scrambleTimer: ReturnType<typeof setInterval>;
+    let revealTimer: ReturnType<typeof setTimeout>;
+
+    setDisplayText(
+      finalChars
+        .map((c) =>
+          c === " "
+            ? " "
+            : SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)],
+        )
+        .join(""),
+    );
+
+    const scrambleRemaining = () => {
+      setDisplayText(
+        finalChars
+          .map((char, i) => {
+            if (i < currentIndex || char === " ") return char;
+            return SCRAMBLE_CHARS[
+              Math.floor(Math.random() * SCRAMBLE_CHARS.length)
+            ];
+          })
+          .join(""),
+      );
+    };
+
+    scrambleTimer = setInterval(scrambleRemaining, SCRAMBLE_SPEED_MS);
+
+    const revealNext = () => {
+      if (currentIndex < finalChars.length) {
+        currentIndex++;
+        revealTimer = setTimeout(revealNext, REVEAL_DELAY_MS);
+      } else {
+        clearInterval(scrambleTimer);
+      }
+    };
+
+    revealTimer = setTimeout(revealNext, REVEAL_DELAY_MS);
+
+    return () => {
+      clearInterval(scrambleTimer);
+      clearTimeout(revealTimer);
+    };
+  }, [currentText]);
+
   return (
-    <div className={`relative h-[1.5em] overflow-hidden ${className}`}>
-      {texts.map((text, i) => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0.4 }}
+      className={`flex justify-center items-center ${className}`}
+      aria-live="polite"
+    >
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
+        className="w-0.5 h-6 shrink-0 bg-white origin-left md:w-1 md:h-8"
+      />
+      <div className="relative min-w-0">
+        <span className="block pr-1 pl-3 text-lg font-medium tracking-widest uppercase whitespace-nowrap text-white/90 md:pl-4 md:text-2xl font-clash">
+          {displayText}
+        </span>
         <motion.div
-          key={text}
-          initial={{ y: "100%" }}
-          animate={{ y: i === index ? "0%" : "-100%" }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="absolute w-full text-center"
-        >
-          {text}
-        </motion.div>
-      ))}
-    </div>
+          key={currentText}
+          className="absolute bottom-0 left-3 right-0 h-[1px] origin-left bg-gradient-to-r from-white/70 to-transparent md:left-4"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        />
+      </div>
+    </motion.div>
   );
 };
 
@@ -1711,6 +1781,21 @@ export default function PortfolioV3() {
               }}
             /> */}
 
+            {/* Open to work badge */}
+            <motion.a
+              href="#contact"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="inline-flex gap-2 items-center px-4 py-2 mb-6 text-sm font-medium rounded-full border transition-colors border-white/20 bg-white/5 text-white/90 hover:bg-white/10 hover:border-white/30"
+            >
+              <span className="flex relative w-2 h-2">
+                <span className="inline-flex absolute w-full h-full bg-green-400 rounded-full opacity-75 animate-ping" />
+                <span className="inline-flex relative w-2 h-2 bg-green-500 rounded-full" />
+              </span>
+              Open to opportunities
+            </motion.a>
+
             {/* Profile Image */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -1761,14 +1846,14 @@ export default function PortfolioV3() {
             </div>
 
             {/* Animated role text */}
-            <AnimatedText
+            {/* <AnimatedText
               texts={[
                 "FULL-STACK DEVELOPER",
-                "UI/UX DESIGNER",
                 "OPEN SOURCE CONTRIBUTOR",
+                "OPEN TO OPPORTUNITIES",
               ]}
               className="mb-6 text-lg font-light tracking-widest text-center uppercase md:mb-8 md:text-2xl text-white/80"
-            />
+            /> */}
 
             {/* Enhanced social links */}
             <SocialLinks />
@@ -2085,7 +2170,8 @@ export default function PortfolioV3() {
                   viewport={{ once: true }}
                   className="mb-8 text-lg md:mb-12 md:text-xl text-white/80"
                 >
-                  Open to new opportunities and collaborations.
+                  Open to full-time roles and collaborations. Hiring? Get in
+                  touch.
                 </motion.p>
 
                 {isSuccess ? (
