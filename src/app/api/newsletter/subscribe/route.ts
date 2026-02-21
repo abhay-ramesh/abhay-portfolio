@@ -123,6 +123,28 @@ Not interested anymore? Unsubscribe here: {{unsubscribe_url}}
       console.error("Failed to send welcome email:", emailError);
     }
 
+    // Notify you that someone subscribed
+    try {
+      await resend.emails.send({
+        from: "Abhay Ramesh <newsletter@mail.abhayramesh.com>",
+        to: "ramesh.abhay14@gmail.com",
+        subject: `New newsletter subscriber: ${body.email}`,
+        html: `
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; padding: 24px;">
+            <h2 style="margin: 0 0 16px 0; font-size: 18px; color: #111;">New newsletter subscriber</h2>
+            <div style="background: #f5f5f5; border-radius: 8px; padding: 16px;">
+              <p style="margin: 0 0 8px 0;"><strong>Email:</strong> ${body.email}</p>
+              ${body.firstName || body.lastName ? `<p style="margin: 0;"><strong>Name:</strong> ${[body.firstName, body.lastName].filter(Boolean).join(" ")}</p>` : ""}
+            </div>
+            <p style="margin: 16px 0 0 0; font-size: 13px; color: #666;">Sent from your portfolio newsletter signup.</p>
+          </div>
+        `,
+        text: `New newsletter subscriber\n\nEmail: ${body.email}${body.firstName || body.lastName ? `\nName: ${[body.firstName, body.lastName].filter(Boolean).join(" ")}` : ""}\n\nSent from your portfolio newsletter signup.`,
+      });
+    } catch (notifyError) {
+      console.error("Failed to send subscription notification to you:", notifyError);
+    }
+
     // Log success for debugging
     console.log("Newsletter subscription successful:", {
       email: body.email,
