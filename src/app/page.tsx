@@ -879,7 +879,10 @@ const Navigation = () => {
       </motion.nav>
 
       {/* Mobile Navigation */}
-      <div className="fixed right-0 bottom-0 left-0 z-50 md:hidden">
+      <nav
+        aria-label="Mobile navigation"
+        className="fixed right-0 bottom-0 left-0 z-50 md:hidden"
+      >
         {/* Mobile Menu Button */}
         <motion.button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -939,7 +942,7 @@ const Navigation = () => {
             ))}
           </div>
         </motion.div>
-      </div>
+      </nav>
     </>
   );
 };

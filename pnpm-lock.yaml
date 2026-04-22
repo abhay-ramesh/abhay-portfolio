@@ -110,6 +110,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.6
         version: 1.0.6(tailwindcss@3.3.2)
+      turndown:
+        specifier: ^7.2.4
+        version: 7.2.4
       typescript:
         specifier: 5.1.3
         version: 5.1.3
@@ -123,6 +126,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.9
         version: 0.5.9(tailwindcss@3.3.2)
+      '@types/turndown':
+        specifier: ^5.0.6
+        version: 5.0.6
       '@types/unist':
         specifier: ^3.0.3
         version: 3.0.3
@@ -554,6 +560,9 @@ packages:
     peerDependencies:
       react: '>=16'
 
+  '@mixmark-io/domino@2.2.0':
+    resolution: {integrity: sha512-Y28PR25bHXUg88kCV7nivXrP2Nj2RueZ3/l/jdx6J9f8J4nsEGcgX0Qe6lt7Pa+J79+kPiJU3LguR6O/6zrLOw==}
+
   '@next/env@15.1.11':
     resolution: {integrity: sha512-yp++FVldfLglEG5LoS2rXhGypPyoSOyY0kxZQJ2vnlYJeP8o318t5DrDu5Tqzr03qAhDWllAID/kOCsXNLcwKw==}
 
@@ -957,6 +966,9 @@ packages:
 
   '@types/scheduler@0.16.3':
     resolution: {integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==}
+
+  '@types/turndown@5.0.6':
+    resolution: {integrity: sha512-ru00MoyeeouE5BX4gRL+6m/BsDfbRayOskWqUvh7CLGW+UXxHQItqALa38kKnOiZPqJrtzJUgAC2+F0rL1S4Pg==}
 
   '@types/unist@2.0.6':
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
@@ -3609,6 +3621,10 @@ packages:
     peerDependencies:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
 
+  turndown@7.2.4:
+    resolution: {integrity: sha512-I8yFsfRzmzK0WV1pNNOA4A7y4RDfFxPRxb3t+e3ui14qSGOxGtiSP6GjeX+Y6CHb7HYaFj7ECUD7VE5kQMZWGQ==}
+    engines: {node: '>=18', npm: '>=9'}
+
   typanion@3.14.0:
     resolution: {integrity: sha512-ZW/lVMRabETuYCd9O9ZvMhAh8GslSqaUjxmK/JLPCh6l73CvLBiuXswj/+7LdnWOgYsQ130FqLzFz5aGT4I3Ug==}
 
@@ -4284,6 +4300,8 @@ snapshots:
       '@types/react': 18.2.12
       react: 19.0.0
 
+  '@mixmark-io/domino@2.2.0': {}
+
   '@next/env@15.1.11': {}
 
   '@next/eslint-plugin-next@14.2.22':
@@ -4669,6 +4687,8 @@ snapshots:
   '@types/resolve@1.20.6': {}
 
   '@types/scheduler@0.16.3': {}
+
+  '@types/turndown@5.0.6': {}
 
   '@types/unist@2.0.6': {}
 
@@ -8147,6 +8167,10 @@ snapshots:
     dependencies:
       tslib: 1.14.1
       typescript: 5.1.3
+
+  turndown@7.2.4:
+    dependencies:
+      '@mixmark-io/domino': 2.2.0
 
   typanion@3.14.0: {}
 
