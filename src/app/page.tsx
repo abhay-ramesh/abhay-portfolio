@@ -1605,95 +1605,21 @@ export default function PortfolioV3() {
   });
 
   useEffect(() => {
-    // Fetch pinned repos and contribution data using GitHub GraphQL API
-    fetch("https://api.github.com/graphql", {
-      method: "POST",
-      headers: {
-        Authorization: `bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: `query {
-          user(login: "abhay-ramesh") {
-            pinnedItems(first: 6, types: [REPOSITORY]) {
-              nodes {
-                ... on Repository {
-                  name
-                  description
-                  stargazerCount
-                  url
-                  primaryLanguage {
-                    name
-                  }
-                  forkCount
-                  isFork
-                  homepageUrl
-                }
-              }
-            }
-            contributionsCollection {
-              contributionCalendar {
-                totalContributions
-                weeks {
-                  contributionDays {
-                    contributionCount
-                    date
-                  }
-                }
-              }
-            }
-          }
-        }`,
-      }),
-    })
+    // Pinned repos and contributions come from our own server route, which
+    // holds the GitHub token server-side. Never call api.github.com from here.
+    fetch("/api/github")
       .then((res) => res.json())
-      .then((data) => {
-        console.log("GitHub GraphQL Response:", data); // Debug log
-
-        // Process pinned repositories
-        if (data.data?.user?.pinnedItems?.nodes) {
-          const pinnedRepos = data.data.user.pinnedItems.nodes.map(
-            (repo: any) => ({
-              name: repo.name,
-              description: repo.description,
-              stargazers_count: repo.stargazerCount,
-              html_url: repo.url,
-              language: repo.primaryLanguage?.name || "Unknown",
-              forks_count: repo.forkCount,
-              fork: repo.isFork,
-              homepage: repo.homepageUrl,
-            }),
-          );
-          setPinnedRepos(pinnedRepos);
-        }
-
-        // Process contribution data
-        if (data.data?.user?.contributionsCollection?.contributionCalendar) {
-          const calendar =
-            data.data.user.contributionsCollection.contributionCalendar;
-          const contributions = calendar.weeks.flatMap(
-            (week: GitHubContributionWeek) =>
-              week.contributionDays.map((day: GitHubContributionDay) => ({
-                date: day.date,
-                count: day.contributionCount,
-                level: getContributionLevel(day.contributionCount),
-              })),
-          );
-          console.log("Processed Contributions:", contributions); // Debug log
-          setContributions(contributions);
-        }
-      })
+      .then(
+        (data: {
+          pinnedRepos?: GitHubRepo[];
+          contributions?: GitHubContribution[];
+        }) => {
+          if (data.pinnedRepos) setPinnedRepos(data.pinnedRepos);
+          if (data.contributions) setContributions(data.contributions);
+        },
+      )
       .catch(console.error);
   }, []);
-
-  // Helper function to determine contribution level
-  const getContributionLevel = (count: number): 0 | 1 | 2 | 3 | 4 => {
-    if (count === 0) return 0;
-    if (count <= 3) return 1;
-    if (count <= 6) return 2;
-    if (count <= 9) return 3;
-    return 4;
-  };
 
   const getContributionColor = (level: number) => {
     switch (level) {
